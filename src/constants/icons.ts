@@ -51,6 +51,7 @@ export const icons = {
   phone: require("../assets/icons/phone.png"),
   phoneb: require("../assets/icons/phoneb.png"),
   chats: require("../assets/icons/Chat.png"),
+  chevronTriple: require('../assets/icons/chevron.png'),
 
 
   // Status
