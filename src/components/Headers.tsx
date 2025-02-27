@@ -49,6 +49,6 @@ const styles = StyleSheet.create({
     color: colors.text.primary,
   },
   rightPlaceholder: {
-    width: 40, // To balance the layout with the back button
+    width: 40, 
   },
 });

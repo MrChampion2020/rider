@@ -14,6 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import MapView, { Polyline, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import Icon from "react-native-vector-icons/Ionicons";
 import { icons } from "../constants/icons";
+import imageSource from '../assets/images/pp.png';
 
 export default function RideDetails() {
   const routeCoordinates = [
@@ -144,7 +145,7 @@ export default function RideDetails() {
         <View style={styles.profileCard}>
           <View style={styles.profileInfo}>
             <Image
-              source={require("../assets/images/pp.png")}
+              source={imageSource} 
               style={styles.profileImage}
             />
             <View>

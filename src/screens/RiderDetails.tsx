@@ -18,6 +18,7 @@ import { icons } from "../constants/icons";
 import { colors } from "../constants/colors";
 import { theme } from "../constants/theme";
 import { useNavigation } from "@react-navigation/native";
+import imageSource from '../assets/images/pp.png';
 
 interface TimelineItem {
   date: string;
@@ -126,7 +127,7 @@ export default function RideDetails() {
             <View style={styles.profileHeader}>
               <View style={styles.profileInfo}>
                 <Image
-                  source={require("../assets/images/pp.png")}
+                 source={imageSource}
                   style={styles.profileImage}
                 />
                 <View style={styles.nameRating}>

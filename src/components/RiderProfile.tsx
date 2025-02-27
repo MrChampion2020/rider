@@ -14,6 +14,9 @@ import { colors } from '../constants/colors';
 import { theme } from '../constants/theme';
 import { icons } from '../constants/icons';
 import Icon from 'react-native-vector-icons/Ionicons';
+import imageSource from '../assets/images/pp.png';
+
+
 
 interface RiderProfileProps {
   name: string;
@@ -33,7 +36,7 @@ export function RiderProfile({
       <View style={styles.content}>
         <View style={styles.profileSection}>
           <Image
-            source={require('../assets/images/pp.png')}
+           source={imageSource}
             style={styles.profileImage}
           />
           <View style={styles.profileInfo}>

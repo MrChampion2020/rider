@@ -4,22 +4,3 @@
     "strict": true
   }
 }
-
-
-// {
-//   "extends": "expo/tsconfig.base",
-//   "compilerOptions": {
-//     "strict": true,
-//     "baseUrl": ".",
-//     "paths": {
-//       "@/*": ["src/*"]
-//     }
-//   },
-//   "include": [
-//     "**/*.ts",
-//     "**/*.tsx"
-//   ],
-//   "exclude": [
-//     "node_modules"
-//   ]
-// }
