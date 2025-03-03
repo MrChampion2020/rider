@@ -7,11 +7,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { GradientBackground } from '../components/BackgroundGradient';
-import { FormInput } from '../components/FormInput';
-import { PasswordInput } from '../components/PasswordInput';
-import { Button } from '../components/Button';
-import { colors } from '../constants/colors';
+import { GradientBackground } from './../../components/BackgroundGradient';
+import { FormInput } from './../../components/FormInput';
+import { PasswordInput } from './../../components/PasswordInput';
+import { Button } from './../../components/Button';
+import { colors } from './../../constants/colors';
 
 const SignUp = () => {
   const [fullName, setFullName] = useState('');

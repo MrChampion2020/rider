@@ -7,10 +7,10 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { GradientBackground } from "../components/BackgroundGradient";
-import { CodeInput } from "../components/CodeInput";
-import { Button } from "../components/Button";
-import { colors } from "../constants/colors";
+import { GradientBackground } from "./../../components/BackgroundGradient";
+import { CodeInput } from "./../../components/CodeInput";
+import { Button } from "./../../components/Button";
+import { colors } from "./../../constants/colors";
 
 const Verify = () => {
   const [timeLeft, setTimeLeft] = useState(59);
@@ -38,7 +38,6 @@ const Verify = () => {
           </Text>
 
           <View style={styles.form}>
-
             <View style={styles.headerRow}>
               <Text style={styles.enterCodeText}>Enter Code</Text>
               <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -46,12 +45,17 @@ const Verify = () => {
               </TouchableOpacity>
             </View>
 
-            <CodeInput 
-            length={5}
-            onCodeComplete={handleCodeComplete} 
-            allowBackspace={true}/>
+            <CodeInput
+              length={5}
+              onCodeComplete={handleCodeComplete}
+              allowBackspace={true}
+            />
 
-            <Button title="Proceed" onPress={() => {}} />
+            {/* <Button title="Proceed" onPress={() => {RideDetails}} /> */}
+            <Button
+              title="Proceed"
+              onPress={() => navigation.navigate("User")}
+            />
 
             <Text style={styles.timerText}>
               Code will be resent in{" "}
@@ -96,17 +100,17 @@ const styles = StyleSheet.create({
     height: "80%",
   },
   headerRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: 10,
   },
   enterCodeText: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     color: colors.text.primary,
   },
-  
+
   goBack: {
     alignSelf: "flex-end",
   },

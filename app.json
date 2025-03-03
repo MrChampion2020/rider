@@ -4,13 +4,15 @@
     "slug": "logistics-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/logo.png",
       "resizeMode": "contain",
       "backgroundColor": "#9C27B0"
     },
+    "newArchEnabled": true,
+    
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -21,7 +23,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/logo.png",
         "backgroundColor": "#9C27B0"
       },
       "package": "com.yourcompany.deliveryapp",

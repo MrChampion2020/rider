@@ -25,4 +25,17 @@ export const theme = {
     xl: 16,
     round: 9999,
   },
+  fontWeights: {
+    regular: "400",
+    medium: "500",
+    semibold: "600",
+    bold: "700",
+  }
 };
+
+
+
+
+ 
+
+

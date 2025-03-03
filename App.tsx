@@ -1,12 +1,15 @@
 
-import React from 'react';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { Navigation } from './src/navigation';
+import { SafeAreaProvider } from "react-native-safe-area-context"
+import { Navigation } from "./src/navigation"
+import { OrderProvider } from "./src/contexts/OrderContext"
 
 export default function App() {
   return (
     <SafeAreaProvider>
-      <Navigation />
+      <OrderProvider>
+        <Navigation />
+      </OrderProvider>
     </SafeAreaProvider>
-  );
+  )
 }
+

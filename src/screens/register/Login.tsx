@@ -10,8 +10,8 @@ import {
   Platform,
 } from "react-native";
 import { Eye, EyeOff } from "lucide-react-native";
-import { GradientBackground } from "../components/BackgroundGradient";
-import { colors } from "../constants/colors";
+import { GradientBackground } from "./../../components/BackgroundGradient";
+import { colors } from "./../../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 
 const Login = () => {

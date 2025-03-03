@@ -11,9 +11,9 @@ import {
   FlatList,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { GradientBackground } from '../components/BackgroundGradient';
-import { colors } from '../constants/colors';
-import { theme } from '../constants/theme';
+import { GradientBackground } from './../../components/BackgroundGradient';
+import { colors } from './../../constants/colors';
+import { theme } from './../../constants/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -22,19 +22,19 @@ const screens = [
     id: 1,
     title: 'Deliver Parcels\nWith Ease',
     description: 'Fast lets you deliver your goods quickly and securely with our advanced tracking technology',
-    image: require('../assets/images/amico.png'),
+    image: require('../../assets/images/amico.png'),
   },
   {
     id: 2,
     title: 'Secure Payment\nHandling',
     description: 'With our in app wallet system, you can make your order pay on delivery and we will handle the transaction seamlessly.',
-    image: require('../assets/images/rafiki.png'),
+    image: require('../../assets/images/rafiki.png'),
   },
   {
     id: 3,
     title: 'Excellent\nSupport System',
     description: 'We are always available 24/7 to make sure we attend to your needs and give you the best customer service',
-    image: require('../assets/images/pana.png'),
+    image: require('../../assets/images/pana.png'),
   },
 ];
 
