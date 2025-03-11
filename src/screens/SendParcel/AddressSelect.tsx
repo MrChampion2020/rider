@@ -20,7 +20,7 @@ interface Address {
 export default function AddressSelect() {
   const navigation = useNavigation()
   const route = useRoute()
-  const { updateAddress } = useOrder()
+  const { updateDeliveryDetails } = useOrder()
   const [selectedAddress, setSelectedAddress] = useState("")
 
   // Safely access route params with default values
@@ -48,9 +48,8 @@ export default function AddressSelect() {
 
   const handleAddressSelect = (address: Address) => {
     setSelectedAddress(address.id)
-    updateAddress({
-      type: addressType,
-      address: address.address,
+    updateDeliveryDetails({
+      [addressType === "sender" ? "senderAddress" : "receiverAddress"]: address.address,
     })
     navigation.navigate("LocationSelect", {
       selectedAddress: address.address,

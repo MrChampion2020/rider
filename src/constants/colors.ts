@@ -2,6 +2,10 @@
   export const colors = {
   primary: '#800080',
   secondary: '#F6F6F6',
+  background: {
+    primary: '#800080',  
+    secondary: '#F6F6F6', 
+  },
   gradient: {
     start: '#800080',
     end: '#F6F6F6',

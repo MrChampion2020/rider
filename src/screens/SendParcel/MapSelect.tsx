@@ -1,5 +1,4 @@
 
-
 "use client"
 
 import { useState } from "react"
@@ -16,7 +15,7 @@ const { width, height } = Dimensions.get("window")
 export default function MapSelect() {
   const navigation = useNavigation()
   const route = useRoute()
-  const { updateAddress } = useOrder()
+  const { updateDeliveryDetails } = useOrder()
   const [selectedLocation, setSelectedLocation] = useState({
     latitude: 40.7128,
     longitude: -74.006,
@@ -30,9 +29,8 @@ export default function MapSelect() {
     const address = `${selectedLocation.latitude.toFixed(6)}, ${selectedLocation.longitude.toFixed(6)}`
     const type = route.params?.type || "sender"
 
-    updateAddress({
-      type,
-      address,
+    updateDeliveryDetails({
+      [type === "sender" ? "senderAddress" : "receiverAddress"]: address,
     })
 
     navigation.navigate("LocationSelect", {
@@ -80,7 +78,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    marginTop: 40
+    marginTop: 40,
   },
   header: {
     flexDirection: "row",

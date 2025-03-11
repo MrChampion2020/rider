@@ -1,14 +1,4 @@
 
-  // export type RootStackParamList = {
-  //   User: undefined
-  //   UserDetails: undefined
-  //   ActiveDeliveries: undefined
-  //   RideSummary: undefined
-  //   RideDetails: undefined
-  //   RideDetailsMap: undefined
-  // }
-  
-  
   export type RootStackParamList = {
     MainApp: undefined
     Auth: undefined
@@ -133,19 +123,6 @@
       type: "sender" | "receiver"
     }
   }
-  
-  // export interface DeliveryStatus {
-  //   date: string
-  //   time: string
-  //   status: string
-  //   location: string
-  // }
-  
-  // export interface RiderProfile {
-  //   name: string
-  //   rating: number
-  //   image: string
-  // }
   
  
   
