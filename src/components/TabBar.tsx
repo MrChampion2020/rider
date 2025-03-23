@@ -1,8 +1,10 @@
+
 import type React from "react"
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native"
 import Icon from "react-native-vector-icons/Ionicons"
 import { colors } from "../constants/colors"
 import { theme } from "../constants/theme"
+import { useNavigation } from "@react-navigation/native"
 
 interface TabBarProps {
   activeTab: string
@@ -10,6 +12,8 @@ interface TabBarProps {
 }
 
 export const TabBar: React.FC<TabBarProps> = ({ activeTab, onTabPress }) => {
+  const navigation = useNavigation()
+
   const tabs = [
     { name: "Home", icon: "home" },
     { name: "Deliveries", icon: "bicycle" },
@@ -18,13 +22,18 @@ export const TabBar: React.FC<TabBarProps> = ({ activeTab, onTabPress }) => {
     { name: "Settings", icon: "settings" },
   ]
 
+  const handlePress = (tabName) => {
+    onTabPress(tabName)
+    navigation.navigate(tabName)
+  }
+
   return (
     <View style={styles.container}>
       {tabs.map((tab) => (
         <TouchableOpacity
           key={tab.name}
           style={[styles.tab, activeTab === tab.name && styles.activeTab, tab.isMain && styles.mainTab]}
-          onPress={() => onTabPress(tab.name)}
+          onPress={() => handlePress(tab.name)}
         >
           {tab.isMain ? (
             <View style={styles.mainTabButton}>
@@ -48,14 +57,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: theme.borderRadius.xl,
     paddingVertical: theme.spacing.lg,
-    margin: 'auto',
+    margin: "auto",
     shadowColor: colors.black,
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 4,
-    width: '91%'
-    
+    width: "91%",
   },
   tab: {
     flex: 1,

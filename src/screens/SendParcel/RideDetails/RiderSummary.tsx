@@ -12,11 +12,11 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
-import { DeliveryTimeline } from "./../../components/DeliveryTimeline";
-import { RiderProfile } from "./../../components/RiderProfile";
-import { colors } from "./../../constants/colors";
-import { theme } from "./../../constants/theme";
-import { icons } from "./../../constants/icons";
+import { DeliveryTimeline } from "../../../components/DeliveryTimeline";
+import { RiderProfile } from "../../../components/RiderProfile";
+import { colors } from "../../../constants/colors";
+import { theme } from "../../../constants/theme";
+import { icons } from "../../../constants/icons";
 import { useNavigation } from "@react-navigation/native";
 
 const deliveryDetails = {

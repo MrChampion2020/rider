@@ -1,4 +1,6 @@
 
+
+
 "use client"
 
 import React, { useState } from "react"
@@ -7,6 +9,9 @@ import { useNavigation } from "@react-navigation/native"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import Icon from "react-native-vector-icons/Ionicons"
 import type { SendParcelStackParamList } from "../../types/navigation"
+// import { DeliveryFeeModal } from "./delivery-fee-modal"
+import { DeliveryFeeModal } from "../../components/Delivery/DeliveryFeeModal"
+
 
 type PaymentDetailsNavigationProp = NativeStackNavigationProp<SendParcelStackParamList, "PaymentDetails">
 
@@ -26,9 +31,34 @@ export default function PaymentDetails() {
   const [isPaymentMethodModalVisible, setIsPaymentMethodModalVisible] = useState(false)
   const [isDeliverySummaryExpanded, setIsDeliverySummaryExpanded] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
+  const [isDeliveryFeeModalVisible, setIsDeliveryFeeModalVisible] = useState(false)
+  const [deliveryFee, setDeliveryFee] = useState("2,500")
 
   const handleProceed = () => {
+    // Show delivery fee modal instead of success modal directly
+    setIsDeliveryFeeModalVisible(true)
+  }
+
+  // Handle payment method selection
+  const handlePaymentMethodSelect = (method: string) => {
+    setPaymentMethod(method)
+    setIsPaymentMethodModalVisible(false)
+    // Show delivery fee modal after payment method selection
+    setIsDeliveryFeeModalVisible(true)
+  }
+
+  // Handle delivery fee confirmation
+  const handleDeliveryFeeConfirm = () => {
+    setAmount(deliveryFee)
+    setIsDeliveryFeeModalVisible(false)
+    // Show success modal after confirming delivery fee
     setShowSuccessModal(true)
+  }
+
+  // Handle amount change
+  const handleAmountChange = (value: string) => {
+    setAmount(value)
+    setDeliveryFee(value) // Update delivery fee when amount changes
   }
 
   const SelectionModal = ({
@@ -172,7 +202,7 @@ export default function PaymentDetails() {
             placeholder="Type Amount"
             placeholderTextColor="#999999"
             value={amount}
-            onChangeText={setAmount}
+            onChangeText={handleAmountChange}
             keyboardType="numeric"
           />
 
@@ -286,7 +316,15 @@ export default function PaymentDetails() {
           { label: "Bank Transfer", value: "bank_transfer", icon: "business-outline" },
         ]}
         selectedValue={paymentMethod}
-        onSelect={setPaymentMethod}
+        onSelect={handlePaymentMethodSelect}
+      />
+
+      <DeliveryFeeModal
+        visible={isDeliveryFeeModalVisible}
+        onClose={() => setIsDeliveryFeeModalVisible(false)}
+        onConfirm={handleDeliveryFeeConfirm}
+        amount={deliveryFee}
+        onAmountChange={setDeliveryFee}
       />
 
       <SuccessModal />
@@ -474,7 +512,7 @@ const styles = StyleSheet.create({
     marginTop: 16,
     borderWidth: 1,
     borderColor: "#EEEEEE",
-    marginBottom: 40
+    marginBottom: 40,
   },
   summaryButtonText: {
     fontSize: 16,
@@ -486,7 +524,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 16,
     marginTop: 8,
-    marginBottom: 40
+    marginBottom: 40,
   },
   summaryItem: {
     marginBottom: 16,

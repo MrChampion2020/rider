@@ -14,11 +14,11 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import MapView, { Polyline, Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import Icon from "react-native-vector-icons/Ionicons";
-import { icons } from "./../../constants/icons";
-import { colors } from "./../../constants/colors";
-import { theme } from "./../../constants/theme";
+import { icons } from "../../../constants/icons";
+import { colors } from "../../../constants/colors";
+import { theme } from "../../../constants/theme";
 import { useNavigation } from "@react-navigation/native";
-import imageSource from './../../assets/images/pp.png';
+import imageSource from '../../../assets/images/pp.png';
 
 interface TimelineItem {
   date: string;
@@ -28,7 +28,7 @@ interface TimelineItem {
   isCompleted: boolean;
 }
 
-export default function RideDetails() {
+export default function DeliveryDetails() {
 
   const navigation = useNavigation();
 

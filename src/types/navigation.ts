@@ -46,9 +46,35 @@ export type RootStackParamList = {
     ScheduleParcel: undefined
     SenderReceiverDetails: undefined
     ParcelDetails: undefined
+    DeliverySummary: {
+      orderId: string
+      status: "delivered"
+      amount: string
+    },
+    Home: undefined
     PaymentDetails: undefined
-    DeliverySummary: undefined
+    SearchRiders: { amount: string }
+    RideConfirmation: { amount: string }
+    RideDetails: {
+      orderId: string
+      status: "in_transit" | "delivered"
+      amount: string
+    }
+    RiderBids: { amount: string }
+    RideSummary: { rider: any; amount: string }
+    RideHistory: undefined
+    DeliveryDetails: { rideId: string }
+    DeliveredSummary: { rideId: string }
+  
   }
+
+  
+  
+   
+
+  
+  
+  
   
   
  
