@@ -12,6 +12,9 @@ export type RootStackParamList = {
     RideSummary: undefined
     RideDetails: undefined
     RideDetailsMap: undefined
+    Address: undefined
+    SavedAddresses: undefined
+    EditAddress: { addressId: string }
   }
   
   
@@ -54,6 +57,7 @@ export type RootStackParamList = {
     Home: undefined
     PaymentDetails: undefined
     SearchRiders: { amount: string }
+    SearchRider: { amount: string }
     RideConfirmation: { amount: string }
     RideDetails: {
       orderId: string
@@ -61,17 +65,18 @@ export type RootStackParamList = {
       amount: string
     }
     RiderBids: { amount: string }
+    RidersBid: { amount: string }
     RideSummary: { rider: any; amount: string }
     RideHistory: undefined
     DeliveryDetails: { rideId: string }
     DeliveredSummary: { rideId: string }
-  
-  }
+    BankTransferPayment: { amount: string }
 
-  
+  }
   
    
-
+ 
+  
   
   
   

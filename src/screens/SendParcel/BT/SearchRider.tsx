@@ -6,9 +6,9 @@ import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView } from "react-na
 import { useNavigation } from "@react-navigation/native"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import Icon from "react-native-vector-icons/Ionicons"
-import type { SendParcelStackParamList } from "../../types/navigation"
+import type { SendParcelStackParamList } from "../../../types/navigation"
 
-type SearchRidersNavigationProp = NativeStackNavigationProp<SendParcelStackParamList, "SearchRiders">
+type SearchRidersNavigationProp = NativeStackNavigationProp<SendParcelStackParamList, "SearchRider">
 
 export default function SearchRiders({ route }: { route: { params: { amount: string } } }) {
   const navigation = useNavigation<SearchRidersNavigationProp>()
@@ -19,7 +19,7 @@ export default function SearchRiders({ route }: { route: { params: { amount: str
     // Simulate finding riders after 3 seconds
     const timer = setTimeout(() => {
       setIsSearching(false)
-      navigation.navigate("RiderBid", { amount })
+      navigation.navigate("RidersBid", { amount })
     }, 3000)
 
     return () => clearTimeout(timer)

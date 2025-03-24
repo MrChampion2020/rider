@@ -41,14 +41,17 @@ import RideConfirmationScreen from "../screens/SendParcel/RideConfirmation"
 import RiderBids from "../screens/SendParcel/RiderBid"
 import RidesSummary from "../screens/SendParcel/RideSummary"
 import RideHistory from "../screens/SendParcel/RideHistory"
+import SearchRider from "../screens/SendParcel/SearchRider"
+import BankTransfer from "../screens/SendParcel/BT/BankDetails"
 
 // Track Parcel and Delivered
+
 import DeliveredSummary from "../screens/SendParcel/DeliveredSummary"
 
 // Tab Screens
 import DeliveriesScreen from "../screens/Deliveries"
-import ChatScreen from "../screens/Chat/index"
-import SettingsScreen from "../screens/Settings/index"
+import ChatScreen from "../screens/Chat"
+import SettingsScreen from "../screens/Settings"
 
 import { TabBar } from "../components/TabBar"
 import type { RootStackParamList, TabNavigatorParamList, SendParcelStackParamList } from "../types"
@@ -70,6 +73,8 @@ function SendParcelNavigator() {
       <SendParcelStack.Screen name="PaymentDetails" component={PaymentDetails} />
       <SendParcelStack.Screen name="DeliverySummary" component={DeliverySummary} />
       <SendParcelStack.Screen name="SearchRiders" component={SearchRidersScreen} />
+      <SendParcelStack.Screen name="SearchRider" component={SearchRider} />
+      <SendParcelStack.Screen name="BankTransfer" component={BankTransfer} />
       <SendParcelStack.Screen name="RideConfirmation" component={RideConfirmationScreen} />
       <SendParcelStack.Screen name="RiderBid" component={RiderBids} />
       <SendParcelStack.Screen name="RidesSummary" component={RidesSummary} />
@@ -98,10 +103,8 @@ function TabNavigator() {
   const [activeTab, setActiveTab] = React.useState("Home")
   const [isSendParcelVisible, setIsSendParcelVisible] = React.useState(false)
 
-  const handleTabPress = (tabName) => {
+  const handleTabPress = (tabName: string) => {
     setActiveTab(tabName)
-
-    // We'll handle the navigation in a different way
     if (tabName === "Add") {
       setIsSendParcelVisible(true)
     }
@@ -121,45 +124,18 @@ function TabNavigator() {
           tabBarStyle: { display: "none" },
         }}
       >
-        <Tab.Screen
-          name="Home"
-          component={HomeStack}
-          listeners={{
-            tabPress: () => setActiveTab("Home"),
-          }}
-        />
-        <Tab.Screen
-          name="Deliveries"
-          component={DeliveriesScreen}
-          listeners={{
-            tabPress: () => setActiveTab("Deliveries"),
-          }}
-        />
+        <Tab.Screen name="Home" component={HomeStack} />
+        <Tab.Screen name="Deliveries" component={DeliveriesScreen} />
         <Tab.Screen
           name="Add"
           component={SendParcelNavigator}
           listeners={{
-            focus: () => {
-              setIsSendParcelVisible(true)
-              setActiveTab("Add")
-            },
+            focus: () => setIsSendParcelVisible(true),
             blur: () => setIsSendParcelVisible(false),
           }}
         />
-        <Tab.Screen
-          name="Chat"
-          component={ChatScreen}
-          listeners={{
-            tabPress: () => setActiveTab("Chat"),
-          }}
-        />
-        <Tab.Screen
-          name="Settings"
-          component={SettingsScreen}
-          listeners={{
-            tabPress: () => setActiveTab("Settings"),
-          }}
-        />
+        <Tab.Screen name="Chat" component={ChatScreen} />
+        <Tab.Screen name="Settings" component={SettingsScreen} />
       </Tab.Navigator>
 
       {!isSendParcelVisible && (

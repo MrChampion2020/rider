@@ -16,7 +16,7 @@ interface DeliveryFeeModalProps {
   onAmountChange: (amount: string) => void
 }
 
-export function FeeModal({ visible, onClose, onConfirm, amount, onAmountChange }: DeliveryFeeModalProps) {
+export function ReceiverModal({ visible, onClose, onConfirm, amount, onAmountChange }: DeliveryFeeModalProps) {
   const navigation = useNavigation<DeliveryFeeNavigationProp>()
 
   const handleDeliverNow = () => {
