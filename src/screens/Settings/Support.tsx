@@ -167,7 +167,7 @@ export default function SupportScreen() {
         return (
           <View style={styles.agentMessageContainer}>
             <Image 
-              source={require("../../assets/support-agent.png")} 
+              source={require("./../../assets/images/support.png")} 
               style={styles.agentAvatar} 
             />
             <View style={styles.agentMessage}>
@@ -187,7 +187,7 @@ export default function SupportScreen() {
               </Text>
             </View>
             <Image 
-              source={require("../../assets/support-agent.png")} 
+              source={require("./../../assets/images/support.png")} 
               style={styles.userAvatar} 
             />
           </View>
@@ -245,7 +245,7 @@ export default function SupportScreen() {
               </Text>
             </View>
             <Image 
-              source={require("../../assets/support-agent.png")} 
+              source={require("./../../assets/images/support.png")} 
               style={styles.userAvatar} 
             />
           </View>

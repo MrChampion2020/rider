@@ -1,5 +1,4 @@
 
-
 "use client"
 
 import React, { useState, useRef, useEffect } from "react"
@@ -19,6 +18,7 @@ import { useNavigation } from "@react-navigation/native"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import Icon from "react-native-vector-icons/Ionicons"
 import type { SendParcelStackParamList } from "../../types/navigation"
+import { useOrder } from "../../contexts/OrderContext"
 
 type ParcelDetailsNavigationProp = NativeStackNavigationProp<SendParcelStackParamList, "ParcelDetails">
 
@@ -47,10 +47,13 @@ const valueRanges: SelectionOption[] = [
 
 export default function ParcelDetails() {
   const navigation = useNavigation<ParcelDetailsNavigationProp>()
-  const [parcelName, setParcelName] = useState("")
-  const [parcelCategory, setParcelCategory] = useState("")
-  const [parcelValue, setParcelValue] = useState("")
-  const [description, setDescription] = useState("")
+  const { deliveryDetails, updateDeliveryDetails } = useOrder()
+
+  const [parcelName, setParcelName] = useState(deliveryDetails.parcelName || "")
+  const [parcelCategory, setParcelCategory] = useState(deliveryDetails.parcelCategory || "")
+  const [parcelValue, setParcelValue] = useState(deliveryDetails.parcelValue || "")
+  const [description, setDescription] = useState(deliveryDetails.description || "")
+
   const [isCategoryModalVisible, setIsCategoryModalVisible] = useState(false)
   const [isValueModalVisible, setIsValueModalVisible] = useState(false)
   const scrollViewRef = useRef<ScrollView>(null)
@@ -73,6 +76,14 @@ export default function ParcelDetails() {
 
   const handleProceed = () => {
     if (parcelName && parcelCategory && parcelValue) {
+      // Update the delivery details in context
+      updateDeliveryDetails({
+        parcelName,
+        parcelCategory,
+        parcelValue,
+        description,
+      })
+
       navigation.navigate("PaymentDetails")
     }
   }
@@ -279,7 +290,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F5F5F5",
-    paddingTop: 30
+    paddingTop: 30,
   },
   header: {
     flexDirection: "row",

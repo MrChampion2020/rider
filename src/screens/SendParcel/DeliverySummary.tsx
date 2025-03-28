@@ -1,4 +1,5 @@
 
+
 "use client"
 
 import React from "react"
@@ -7,6 +8,7 @@ import { useNavigation } from "@react-navigation/native"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import Icon from "react-native-vector-icons/Ionicons"
 import type { SendParcelStackParamList } from "../../types/navigation"
+import { useOrder } from "../../contexts/OrderContext"
 
 type DeliverySummaryNavigationProp = NativeStackNavigationProp<SendParcelStackParamList, "DeliverySummary">
 
@@ -24,6 +26,7 @@ const SummaryItem = ({ label, value }: SummaryItemProps) => (
 
 export default function DeliverySummary() {
   const navigation = useNavigation<DeliverySummaryNavigationProp>()
+  const { deliveryDetails } = useOrder()
 
   return (
     <SafeAreaView style={styles.container}>
@@ -56,7 +59,9 @@ export default function DeliverySummary() {
               <Icon name="location" size={20} color="#00A651" />
               <View style={styles.addressContent}>
                 <Text style={styles.addressLabel}>Sender Address</Text>
-                <Text style={styles.addressValue}>No 1, alobalowo street, off saki iseyin express way, Iseyin,Oyo</Text>
+                <Text style={styles.addressValue}>
+                  {deliveryDetails.senderAddress || "No 1, alobalowo street, off saki iseyin express way, Iseyin,Oyo"}
+                </Text>
               </View>
             </View>
             <View style={styles.addressDivider} />
@@ -64,23 +69,25 @@ export default function DeliverySummary() {
               <Icon name="location" size={20} color="#FF0000" />
               <View style={styles.addressContent}>
                 <Text style={styles.addressLabel}>Receiver Address</Text>
-                <Text style={styles.addressValue}>No 1, alobalowo street, off saki iseyin express way, Iseyin,Oyo</Text>
+                <Text style={styles.addressValue}>
+                  {deliveryDetails.receiverAddress || "No 1, alobalowo street, off saki iseyin express way, Iseyin,Oyo"}
+                </Text>
               </View>
             </View>
           </View>
 
           <View style={styles.detailsSection}>
-            <SummaryItem label="Sender Name" value="Qamardeen Malik" />
-            <SummaryItem label="Sender Phone" value="07030123456" />
-            <SummaryItem label="Receiver Name" value="Adebisi Lateefat" />
-            <SummaryItem label="Receiver Phone" value="07031234567" />
+            <SummaryItem label="Sender Name" value={deliveryDetails.senderName || "Qamardeen Malik"} />
+            <SummaryItem label="Sender Phone" value={deliveryDetails.senderPhone || "07030123456"} />
+            <SummaryItem label="Receiver Name" value={deliveryDetails.receiverName || "Adebisi Lateefat"} />
+            <SummaryItem label="Receiver Phone" value={deliveryDetails.receiverPhone || "07031234567"} />
           </View>
 
           <View style={styles.detailsSection}>
-            <SummaryItem label="Parcel Name" value="Samsung Phone" />
-            <SummaryItem label="Parcel Category" value="Electronics" />
-            <SummaryItem label="Parcel Value" value="100,000 - 200,000" />
-            <SummaryItem label="Description" value="Nil" />
+            <SummaryItem label="Parcel Name" value={deliveryDetails.parcelName || "Samsung Phone"} />
+            <SummaryItem label="Parcel Category" value={deliveryDetails.parcelCategory || "Electronics"} />
+            <SummaryItem label="Parcel Value" value={deliveryDetails.parcelValue || "100,000 - 200,000"} />
+            <SummaryItem label="Description" value={deliveryDetails.description || "Nil"} />
           </View>
 
           <View style={styles.paymentSection}>

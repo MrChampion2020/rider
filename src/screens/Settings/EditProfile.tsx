@@ -122,28 +122,6 @@ export default function EditProfileScreen() {
         )}
       </TouchableOpacity>
 
-      {/* Bottom Navigation */}
-      <View style={styles.bottomNav}>
-        <TouchableOpacity style={styles.navItem}>
-          <Icon name="home-outline" size={24} color="#000000" />
-          <Text style={styles.navText}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Icon name="bicycle-outline" size={24} color="#000000" />
-          <Text style={styles.navText}>Deliveries</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.addButton}>
-          <Icon name="add" size={24} color="#FFFFFF" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Icon name="chatbubble-outline" size={24} color="#000000" />
-          <Text style={styles.navText}>Chat</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
-          <Icon name="settings" size={24} color="#800080" />
-          <Text style={[styles.navText, styles.activeNavText]}>Settings</Text>
-        </TouchableOpacity>
-      </View>
 
       {/* Password Change Modal */}
       <Modal

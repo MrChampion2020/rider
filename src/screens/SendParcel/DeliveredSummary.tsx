@@ -128,6 +128,7 @@ export default function DeliveredSummary({ route }: DeliverySummaryProps) {
           </View>
 
           <View style={styles.riderDetails}>
+
             <View style={styles.riderDetailRow}>
               <Icon name="bicycle" size={20} color="#333333" />
               <Text style={styles.riderDetailText}>Bike</Text>
@@ -442,6 +443,7 @@ const styles = StyleSheet.create({
   riderDetails: {
     flex: 1,
     marginLeft: 12,
+   
   },
   riderName: {
     fontSize: 16,
@@ -465,10 +467,11 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   riderDetailRow: {
+    display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    marginRight: 24,
-    marginBottom: 8,
+    // marginRight: 24,
+    // marginBottom: 8,
   },
   riderDetailText: {
     fontSize: 14,

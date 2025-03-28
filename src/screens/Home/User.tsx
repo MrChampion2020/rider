@@ -69,6 +69,11 @@ export default function User() {
     }
   };
 
+  const handleNotificationsPress = () => {
+    navigation.navigate("Notification")
+  }
+  
+
   const handleParcelPress = (action: string) => {
     if (action === "Schedule") {
       navigation.navigate("Add", { screen: "ScheduleParcel" })
@@ -124,6 +129,8 @@ export default function User() {
                 name="notifications-outline"
                 size={24}
                 color={colors.white}
+
+                onPress={handleNotificationsPress}
               />
             </TouchableOpacity>
           </View>

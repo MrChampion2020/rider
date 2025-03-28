@@ -23,8 +23,7 @@ export type RootStackParamList = {
     Deliveries: undefined
     Add: undefined
     Chat: undefined
-    Settings: undefined
-    
+    Settings: undefined 
   }
   
 
@@ -70,17 +69,36 @@ export type RootStackParamList = {
     RideHistory: undefined
     DeliveryDetails: { rideId: string }
     DeliveredSummary: { rideId: string }
-    BankTransferPayment: { amount: string }
+    BankDetails: { rider: any; amount: string }
 
   }
   
-   
- 
+  export type SettingsStackParamList = {
+    SettingsMain: undefined
+    Wallet: undefined
+    Support: undefined
+    Address: undefined
+    Notifications: undefined
+    FAQs: undefined
+    EditProfile: undefined
+    SavedAddresses: undefined
+  }
   
-  
-  
-  
-  
+export type DeliveriesStackParamList = {
+  DeliveryMain: undefined
+  OngoingDeliveries: undefined
+  CompletedDeliveries: undefined
+  DeliveryTracking: { deliveryId: string }
+  DeliveryDetails: { deliveryId: string }
+  DeliveryFeedback: { deliveryId: string }
+  DeliveryIssue: { deliveryId: string }
+  DeliveryRating: { deliveryId: string }
+  RideHistory: undefined
+  RidesDetails: { rideId: string }
+  RideSummary: { rider: any; amount: string }
+}
+
+
   
  
   

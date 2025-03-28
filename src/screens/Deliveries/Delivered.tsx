@@ -1,7 +1,6 @@
 
-
 "use client"
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native"
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import Icon from "react-native-vector-icons/Ionicons"
 import { colors } from "../../constants/colors"
@@ -9,43 +8,53 @@ import { colors } from "../../constants/colors"
 // Define the delivery item type
 interface DeliveryItem {
   id: string
-  status: "Scheduled"
+  status: "Delivered" | "In transit" | "Picked up" | "Order"
   fromAddress: string
   toAddress: string
   orderTime: string
   deliveryTime: string
-  scheduledDate: string
-  scheduledTime: string
+  rider: {
+    name: string
+    avatar: any
+    rating: number
+  }
 }
 
-const ScheduledDeliveries = () => {
+const DeliveredDeliveries = () => {
   const navigation = useNavigation()
 
   // Sample data
   const deliveries: DeliveryItem[] = [
     {
       id: "ORD-12ESCJK3K",
-      status: "Scheduled",
+      status: "Delivered",
       fromAddress: "No 1, abcd street...",
       toAddress: "No 1, abcd street....",
       orderTime: "11:24 AM",
-      deliveryTime: "Scheduled",
-      scheduledDate: "23rd Feb,2025",
-      scheduledTime: "11:24 AM",
+      deliveryTime: "01:22 PM",
+      rider: {
+        name: "Maleek Oladimeji",
+        avatar: require("../../assets/images/pp.png"),
+        rating: 5,
+      },
     },
     {
       id: "ORD-12ESCJK3K",
-      status: "Scheduled",
+      status: "Delivered",
       fromAddress: "No 1, abcd street...",
       toAddress: "No 1, abcd street....",
       orderTime: "11:24 AM",
-      deliveryTime: "Scheduled",
-      scheduledDate: "23rd Feb,2025",
-      scheduledTime: "11:24 AM",
+      deliveryTime: "01:22 PM",
+      rider: {
+        name: "Maleek Oladimeji",
+        avatar: require("../../assets/images/pp.png"),
+        rating: 5,
+      },
     },
   ]
 
   const handleDeliveryPress = (delivery: DeliveryItem) => {
+    // Navigate to DeliveryDetails screen with the delivery ID
     navigation.navigate("DeliveryDetails", { deliveryId: delivery.id })
   }
 
@@ -80,23 +89,52 @@ const ScheduledDeliveries = () => {
         </View>
       </View>
 
-      <View style={styles.scheduledContainer}>
-        <Text style={styles.scheduledTitle}>Ride Scheduled</Text>
-        <View style={styles.scheduledDetails}>
-          <View style={styles.dateContainer}>
-            <Icon name="calendar-outline" size={20} color={colors.primary} />
-            <Text style={styles.scheduledText}>{item.scheduledDate}</Text>
-          </View>
-          <View style={styles.timeContainer}>
-            <Icon name="time-outline" size={20} color={colors.primary} />
-            <Text style={styles.scheduledText}>{item.scheduledTime}</Text>
-          </View>
+      <View style={styles.progressContainer}>
+        <View style={styles.progressStep}>
+          <View style={[styles.progressDot, styles.activeDot]} />
+          <Text style={styles.progressText}>Order</Text>
+        </View>
+        <View style={styles.progressLine} />
+        <View style={styles.progressStep}>
+          <View style={[styles.progressDot, styles.activeDot]} />
+          <Text style={styles.progressText}>Picked up</Text>
+        </View>
+        <View style={styles.progressLine} />
+        <View style={styles.progressStep}>
+          <View style={[styles.progressDot, styles.activeDot]} />
+          <Text style={styles.progressText}>In transit</Text>
+        </View>
+        <View style={styles.progressLine} />
+        <View style={styles.progressStep}>
+          <View style={[styles.progressDot, styles.activeDot]} />
+          <Text style={styles.progressText}>Delivered</Text>
         </View>
       </View>
 
-      <TouchableOpacity style={styles.proceedButton}>
-        <Text style={styles.proceedButtonText}>Proceed</Text>
-      </TouchableOpacity>
+      <View style={styles.riderContainer}>
+        <Image source={item.rider.avatar} style={styles.riderAvatar} />
+        <View style={styles.riderInfo}>
+          <Text style={styles.riderName}>{item.rider.name}</Text>
+          <View style={styles.ratingContainer}>
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Icon
+                key={star}
+                name={star <= item.rider.rating ? "star" : "star-outline"}
+                size={16}
+                color={colors.primary}
+              />
+            ))}
+          </View>
+        </View>
+        <View style={styles.riderActions}>
+          <TouchableOpacity style={styles.riderAction}>
+            <Icon name="chatbubble-outline" size={20} color={colors.primary} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.riderAction}>
+            <Icon name="phone-portrait-outline" size={20} color={colors.primary} />
+          </TouchableOpacity>
+        </View>
+      </View>
     </TouchableOpacity>
   )
 
@@ -114,6 +152,7 @@ const ScheduledDeliveries = () => {
 const styles = StyleSheet.create({
   listContainer: {
     padding: 16,
+    
   },
   deliveryCard: {
     backgroundColor: "#FFFFFF",
@@ -138,7 +177,7 @@ const styles = StyleSheet.create({
     color: "#000000",
   },
   statusBadge: {
-    backgroundColor: colors.primary,
+    backgroundColor: "#00A86B",
     paddingHorizontal: 12,
     paddingVertical: 4,
     borderRadius: 16,
@@ -174,50 +213,73 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#000000",
   },
-  scheduledContainer: {
-    backgroundColor: "#F5F5F5",
-    padding: 12,
-    borderRadius: 8,
+  progressContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
     marginBottom: 16,
   },
-  scheduledTitle: {
-    fontSize: 14,
+  progressStep: {
+    alignItems: "center",
+  },
+  progressDot: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: "#E0E0E0",
+    marginBottom: 4,
+  },
+  activeDot: {
+    backgroundColor: colors.primary,
+  },
+  progressLine: {
+    flex: 1,
+    height: 0.3,
+    backgroundColor: colors.grey,
+    marginBottom: 15,
+  },
+  progressText: {
+    fontSize: 10,
     color: "#666666",
-    marginBottom: 8,
-    textAlign: "center",
   },
-  scheduledDetails: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  dateContainer: {
+  riderContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginRight: 16,
+    borderTopWidth: 1,
+    borderTopColor: "#F0F0F0",
+    paddingTop: 16,
   },
-  timeContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+  riderAvatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
   },
-  scheduledText: {
+  riderInfo: {
+    flex: 1,
+    marginLeft: 12,
+  },
+  riderName: {
     fontSize: 14,
     fontWeight: "500",
     color: "#000000",
-    marginLeft: 8,
+    marginBottom: 4,
   },
-  proceedButton: {
-    backgroundColor: colors.primary,
-    borderRadius: 8,
-    paddingVertical: 12,
+  ratingContainer: {
+    flexDirection: "row",
+  },
+  riderActions: {
+    flexDirection: "row",
+  },
+  riderAction: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: "#F8E6FF",
     alignItems: "center",
-  },
-  proceedButtonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
-    fontWeight: "600",
+    justifyContent: "center",
+    marginLeft: 8,
   },
 })
 
-export default ScheduledDeliveries
+export default DeliveredDeliveries
 

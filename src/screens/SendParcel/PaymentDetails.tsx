@@ -1,17 +1,18 @@
 
-
-
 "use client"
 
-import React, { useState } from "react"
-import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, TextInput, Modal, ScrollView } from "react-native"
+import React from "react"
+
+import { useState } from "react"
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, TextInput, ScrollView, Modal } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import Icon from "react-native-vector-icons/Ionicons"
 import type { SendParcelStackParamList } from "../../types/navigation"
-// import { DeliveryFeeModal } from "./delivery-fee-modal"
 import { DeliveryFeeModal } from "../../components/Delivery/DeliveryFeeModal"
-
+import { FeeModal } from "../../components/Delivery/FeeModal"
+import { ReceiverModal } from "../../components/Delivery/ReceiverModal"
+import { useOrder } from "../../contexts/OrderContext"
 
 type PaymentDetailsNavigationProp = NativeStackNavigationProp<SendParcelStackParamList, "PaymentDetails">
 
@@ -23,42 +24,73 @@ interface SelectionOption {
 
 export default function PaymentDetails() {
   const navigation = useNavigation<PaymentDetailsNavigationProp>()
-  const [payer, setPayer] = useState("")
-  const [paymentMethod, setPaymentMethod] = useState("")
-  const [isPayOnDelivery, setIsPayOnDelivery] = useState(false)
-  const [amount, setAmount] = useState("")
+  const { deliveryDetails, updateDeliveryDetails } = useOrder()
+
+  const [payer, setPayer] = useState(deliveryDetails.payer || "")
+  const [paymentMethod, setPaymentMethod] = useState(deliveryDetails.paymentMethod || "")
+  const [isPayOnDelivery, setIsPayOnDelivery] = useState(deliveryDetails.payOnDelivery || false)
+  const [amount, setAmount] = useState(deliveryDetails.amount ? deliveryDetails.amount.toString() : "2,500")
+
   const [isPayerModalVisible, setIsPayerModalVisible] = useState(false)
   const [isPaymentMethodModalVisible, setIsPaymentMethodModalVisible] = useState(false)
   const [isDeliverySummaryExpanded, setIsDeliverySummaryExpanded] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [isDeliveryFeeModalVisible, setIsDeliveryFeeModalVisible] = useState(false)
-  const [deliveryFee, setDeliveryFee] = useState("2,500")
+  const [isFeeModalVisible, setIsFeeModalVisible] = useState(false)
+  const [isReceiverModalVisible, setIsReceiverModalVisible] = useState(false)
 
+  // Update the handleProceed function to navigate to different paths based on payment method
   const handleProceed = () => {
-    // Show delivery fee modal instead of success modal directly
-    setIsDeliveryFeeModalVisible(true)
+    // Save the payment details to context
+    updateDeliveryDetails({
+      payer,
+      paymentMethod,
+      payOnDelivery: isPayOnDelivery,
+      amount: Number.parseFloat(amount.replace(/,/g, "")),
+      delivery: Number.parseFloat(amount.replace(/,/g, "")),
+    })
+
+    if (payer === "sender") {
+      if (paymentMethod === "wallet") {
+        // Show delivery fee modal for sender paying with wallet
+        setIsDeliveryFeeModalVisible(true)
+      } else if (paymentMethod === "bank_transfer") {
+        // Show fee modal for sender paying with bank transfer
+        setIsFeeModalVisible(true)
+      }
+    } else if (payer === "receiver") {
+      // Show receiver modal when receiver is paying
+      setIsReceiverModalVisible(true)
+    }
   }
 
   // Handle payment method selection
   const handlePaymentMethodSelect = (method: string) => {
     setPaymentMethod(method)
     setIsPaymentMethodModalVisible(false)
-    // Show delivery fee modal after payment method selection
-    setIsDeliveryFeeModalVisible(true)
   }
 
-  // Handle delivery fee confirmation
+  // Update the handleDeliveryFeeConfirm function to navigate to SearchRiders
   const handleDeliveryFeeConfirm = () => {
-    setAmount(deliveryFee)
     setIsDeliveryFeeModalVisible(false)
-    // Show success modal after confirming delivery fee
-    setShowSuccessModal(true)
+    navigation.navigate("SearchRiders", { amount })
+  }
+
+  // Update the handleFeeConfirm function to navigate to SearchRider (not SearchRiders)
+  const handleFeeConfirm = () => {
+    setIsFeeModalVisible(false)
+    navigation.navigate("SearchRider", { amount })
+  }
+
+  // Update the handleReceiverConfirm function to navigate to SearchRider
+  const handleReceiverConfirm = () => {
+    setIsReceiverModalVisible(false)
+    navigation.navigate("SearchRider", { amount })
   }
 
   // Handle amount change
   const handleAmountChange = (value: string) => {
     setAmount(value)
-    setDeliveryFee(value) // Update delivery fee when amount changes
   }
 
   const SelectionModal = ({
@@ -109,7 +141,7 @@ export default function PaymentDetails() {
   )
 
   const SuccessModal = () => (
-    <Modal visible={showSuccessModal} transparent animationType="fade">
+    <Modal visible={showSuccessModal} transparent={true} animationType="fade">
       <View style={styles.modalOverlay}>
         <View style={styles.successModalContent}>
           <Text style={styles.successModalTitle}>Ride Schedule</Text>
@@ -231,7 +263,8 @@ export default function PaymentDetails() {
                   <View style={styles.summaryAddressContent}>
                     <Text style={styles.summaryLabel}>Sender Address</Text>
                     <Text style={styles.summaryValue}>
-                      No 1, alobalowo street, off saki iseyin express way, Iseyin,Oyo
+                      {deliveryDetails.senderAddress ||
+                        "No 1, alobalowo street, off saki iseyin express way, Iseyin,Oyo"}
                     </Text>
                   </View>
                 </View>
@@ -241,7 +274,8 @@ export default function PaymentDetails() {
                   <View style={styles.summaryAddressContent}>
                     <Text style={styles.summaryLabel}>Receiver Address</Text>
                     <Text style={styles.summaryValue}>
-                      No 1, alobalowo street, off saki iseyin express way, Iseyin,Oyo
+                      {deliveryDetails.receiverAddress ||
+                        "No 1, alobalowo street, off saki iseyin express way, Iseyin,Oyo"}
                     </Text>
                   </View>
                 </View>
@@ -249,35 +283,35 @@ export default function PaymentDetails() {
               <View style={styles.summaryDetails}>
                 <View style={styles.summaryRow}>
                   <Text style={styles.summaryLabel}>Sender Name</Text>
-                  <Text style={styles.summaryValue}>Qamardeen Malik</Text>
+                  <Text style={styles.summaryValue}>{deliveryDetails.senderName || "Qamardeen Malik"}</Text>
                 </View>
                 <View style={styles.summaryRow}>
                   <Text style={styles.summaryLabel}>Sender Phone</Text>
-                  <Text style={styles.summaryValue}>07030123456</Text>
+                  <Text style={styles.summaryValue}>{deliveryDetails.senderPhone || "07030123456"}</Text>
                 </View>
                 <View style={styles.summaryRow}>
                   <Text style={styles.summaryLabel}>Receiver Name</Text>
-                  <Text style={styles.summaryValue}>Adebisi Lateefat</Text>
+                  <Text style={styles.summaryValue}>{deliveryDetails.receiverName || "Adebisi Lateefat"}</Text>
                 </View>
                 <View style={styles.summaryRow}>
                   <Text style={styles.summaryLabel}>Receiver Phone</Text>
-                  <Text style={styles.summaryValue}>07031234567</Text>
+                  <Text style={styles.summaryValue}>{deliveryDetails.receiverPhone || "07031234567"}</Text>
                 </View>
                 <View style={styles.summaryRow}>
                   <Text style={styles.summaryLabel}>Parcel Name</Text>
-                  <Text style={styles.summaryValue}>Samsung Phone</Text>
+                  <Text style={styles.summaryValue}>{deliveryDetails.parcelName || "Samsung Phone"}</Text>
                 </View>
                 <View style={styles.summaryRow}>
                   <Text style={styles.summaryLabel}>Parcel Category</Text>
-                  <Text style={styles.summaryValue}>Electronics</Text>
+                  <Text style={styles.summaryValue}>{deliveryDetails.parcelCategory || "Electronics"}</Text>
                 </View>
                 <View style={styles.summaryRow}>
                   <Text style={styles.summaryLabel}>Parcel Value</Text>
-                  <Text style={styles.summaryValue}>100,000 - 200,000</Text>
+                  <Text style={styles.summaryValue}>{deliveryDetails.parcelValue || "100,000 - 200,000"}</Text>
                 </View>
                 <View style={styles.summaryRow}>
                   <Text style={styles.summaryLabel}>Description</Text>
-                  <Text style={styles.summaryValue}>Nil</Text>
+                  <Text style={styles.summaryValue}>{deliveryDetails.description || "Nil"}</Text>
                 </View>
               </View>
             </View>
@@ -319,12 +353,28 @@ export default function PaymentDetails() {
         onSelect={handlePaymentMethodSelect}
       />
 
+      {/* Different modals for different payment flows */}
       <DeliveryFeeModal
         visible={isDeliveryFeeModalVisible}
         onClose={() => setIsDeliveryFeeModalVisible(false)}
         onConfirm={handleDeliveryFeeConfirm}
-        amount={deliveryFee}
-        onAmountChange={setDeliveryFee}
+        amount={amount}
+        onAmountChange={setAmount}
+      />
+
+      <FeeModal
+        visible={isFeeModalVisible}
+        onClose={() => setIsFeeModalVisible(false)}
+        onConfirm={handleFeeConfirm}
+        amount={amount}
+        onAmountChange={setAmount}
+      />
+
+      <ReceiverModal
+        visible={isReceiverModalVisible}
+        onClose={() => setIsReceiverModalVisible(false)}
+        onConfirm={handleReceiverConfirm}
+        amount={amount}
       />
 
       <SuccessModal />

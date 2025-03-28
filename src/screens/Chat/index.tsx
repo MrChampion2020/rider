@@ -202,8 +202,14 @@ export default function ChatScreen() {
         // Chat Room Screen
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
-          style={styles.container}
+          style={[
+            styles.container, 
+            {
+              marginBottom: -5
+            },
+          ]}  
           keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
+
         >
           <View style={styles.chatRoomHeader}>
             <TouchableOpacity onPress={handleBackToChats} style={styles.backButton}>
@@ -246,6 +252,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#F5F5F5",
     paddingTop: 30,
+    height: "auto",
+    marginBottom: 110
   },
   header: {
     flexDirection: "row",
