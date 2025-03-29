@@ -1,7 +1,7 @@
 
 "use client"
 
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef } from "react"
 import { StyleSheet, View, Platform } from "react-native"
 import { NavigationContainer } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
@@ -79,177 +79,25 @@ const DeliveriesStack = createNativeStackNavigator<DeliveriesStackParamList>()
 function SendParcelNavigator() {
   return (
     <SendParcelStack.Navigator screenOptions={{ headerShown: false }}>
-      <SendParcelStack.Screen
-        name="SendParcel"
-        component={SendParcel}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <SendParcelStack.Screen
-        name="LocationSelect"
-        component={LocationSelect}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <SendParcelStack.Screen
-        name="AddressSelect"
-        component={AddressSelect}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <SendParcelStack.Screen
-        name="MapSelect"
-        component={MapSelect}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <SendParcelStack.Screen
-        name="ScheduleParcel"
-        component={ScheduleParcel}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <SendParcelStack.Screen
-        name="SenderReceiverDetails"
-        component={SenderReceiverDetails}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <SendParcelStack.Screen
-        name="ParcelDetails"
-        component={ParcelDetails}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <SendParcelStack.Screen
-        name="PaymentDetails"
-        component={PaymentDetails}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <SendParcelStack.Screen
-        name="DeliverySummary"
-        component={DeliverySummary}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <SendParcelStack.Screen
-        name="SearchRiders"
-        component={SearchRidersScreen}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <SendParcelStack.Screen
-        name="SearchRider"
-        component={SearchRider}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <SendParcelStack.Screen
-        name="BankDetails"
-        component={BankDetails}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <SendParcelStack.Screen
-        name="RideConfirmation"
-        component={RideConfirmationScreen}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <SendParcelStack.Screen
-        name="RiderBid"
-        component={RiderBids}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <SendParcelStack.Screen
-        name="RidesSummary"
-        component={RidesSummary}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <SendParcelStack.Screen
-        name="RideHistory"
-        component={RideHistory}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <SendParcelStack.Screen
-        name="RidesDetails"
-        component={RidesDetails}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <SendParcelStack.Screen
-        name="DeliveryDetails"
-        component={DeliveryDetails}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <SendParcelStack.Screen
-        name="DeliveredSummary"
-        component={DeliveredSummary}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
+      <SendParcelStack.Screen name="SendParcel" component={SendParcel} />
+      <SendParcelStack.Screen name="LocationSelect" component={LocationSelect} />
+      <SendParcelStack.Screen name="AddressSelect" component={AddressSelect} />
+      <SendParcelStack.Screen name="MapSelect" component={MapSelect} />
+      <SendParcelStack.Screen name="ScheduleParcel" component={ScheduleParcel} />
+      <SendParcelStack.Screen name="SenderReceiverDetails" component={SenderReceiverDetails} />
+      <SendParcelStack.Screen name="ParcelDetails" component={ParcelDetails} />
+      <SendParcelStack.Screen name="PaymentDetails" component={PaymentDetails} />
+      <SendParcelStack.Screen name="DeliverySummary" component={DeliverySummary} />
+      <SendParcelStack.Screen name="SearchRiders" component={SearchRidersScreen} />
+      <SendParcelStack.Screen name="SearchRider" component={SearchRider} />
+      <SendParcelStack.Screen name="BankDetails" component={BankDetails} />
+      <SendParcelStack.Screen name="RideConfirmation" component={RideConfirmationScreen} />
+      <SendParcelStack.Screen name="RiderBid" component={RiderBids} />
+      <SendParcelStack.Screen name="RidesSummary" component={RidesSummary} />
+      <SendParcelStack.Screen name="RideHistory" component={RideHistory} />
+      <SendParcelStack.Screen name="RidesDetails" component={RidesDetails} />
+      <SendParcelStack.Screen name="DeliveryDetails" component={DeliveryDetails} />
+      <SendParcelStack.Screen name="DeliveredSummary" component={DeliveredSummary} />
     </SendParcelStack.Navigator>
   )
 }
@@ -271,51 +119,11 @@ function SettingsNavigator() {
 function DeliveriesNavigator() {
   return (
     <DeliveriesStack.Navigator screenOptions={{ headerShown: false }}>
-      <DeliveriesStack.Screen
-        name="DeliveryMain"
-        component={DeliveredHistory}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <DeliveriesStack.Screen
-        name="DeliveryDetails"
-        component={DeliveryDetails}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <DeliveriesStack.Screen
-        name="RideHistory"
-        component={RideHistory}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <DeliveriesStack.Screen
-        name="RidesDetails"
-        component={RidesDetails}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
-      <DeliveriesStack.Screen
-        name="RideSummary"
-        component={RideSummary}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            navigation.getParent()?.setParams({ hideTabBar: true })
-          },
-        })}
-      />
+      <DeliveriesStack.Screen name="DeliveryMain" component={DeliveredHistory} />
+      <DeliveriesStack.Screen name="DeliveryDetails" component={DeliveryDetails} />
+      <DeliveriesStack.Screen name="RideHistory" component={RideHistory} />
+      <DeliveriesStack.Screen name="RidesDetails" component={RidesDetails} />
+      <DeliveriesStack.Screen name="RideSummary" component={RideSummary} />
     </DeliveriesStack.Navigator>
   )
 }
@@ -371,13 +179,36 @@ export function Navigation() {
 
   // Function to handle tab press
   const handleTabPress = (tabName: string) => {
-    // Update the current tab immediately for UI feedback
     setCurrentTab(tabName)
-
-    // Navigate to the selected tab
     if (navigationRef.current) {
       navigationRef.current.navigate(tabName)
     }
+  }
+
+  // This function will determine if we should hide the tab bar based on the current route
+  const shouldHideTabBar = (state: any): boolean => {
+    if (!state) return false
+
+    // Get the current active route
+    const routes = state.routes
+    const currentRoute = routes[state.index]
+
+    // Check if we're in the Add (SendParcel) tab
+    if (currentRoute.name === "Add") {
+      return true
+    }
+
+    // Check if we're in the Deliveries tab
+    if (currentRoute.name === "Deliveries") {
+      return true
+    }
+
+    // For nested navigators, we need to check their state too
+    if (currentRoute.state) {
+      return shouldHideTabBar(currentRoute.state)
+    }
+
+    return false
   }
 
   // Function to handle navigation state changes
@@ -387,48 +218,27 @@ export function Navigation() {
     // Get the current active route
     const currentRoute = state.routes[state.index]
 
-    // Update the current tab
+    // Update the current tab if it's a main tab
     if (["Home", "Deliveries", "Add", "Chat", "Settings"].includes(currentRoute.name)) {
       setCurrentTab(currentRoute.name)
     }
 
-    // Check if we're in the Add tab (SendParcel stack)
-    if (currentRoute.name === "Add") {
-      // We're in the SendParcel stack, so hide the tab bar
-      setHideTabBar(true)
-    } else if (currentRoute.name === "Deliveries") {
-      // We're in the Deliveries stack, so hide the tab bar
-      setHideTabBar(true)
-    } else {
-      // We're not in the SendParcel or Deliveries stack, so show the tab bar
-      setHideTabBar(false)
-    }
-
-    // Also check for params that might indicate we should hide the tab bar
-    if (currentRoute.params && currentRoute.params.hideTabBar) {
-      setHideTabBar(true)
-    }
+    // Determine if we should hide the tab bar
+    setHideTabBar(shouldHideTabBar(state))
   }
 
-  // Listen for route params changes
-  useEffect(() => {
-    if (navigationRef.current) {
-      const unsubscribe = navigationRef.current.addListener("state", (e: any) => {
-        const state = e.data.state
-        if (state && state.routes && state.routes[state.index]) {
-          const currentRoute = state.routes[state.index]
-          if (currentRoute.params && currentRoute.params.hideTabBar) {
-            setHideTabBar(true)
-          }
-        }
-      })
-
-      return unsubscribe
-    }
-  }, [navigationRef.current])
-
   return (
-    <NavigationContainer ref={navigationRef} onStateChange={handleNavigationStateChange}>
+    <NavigationContainer
+      ref={navigationRef}
+      onStateChange={handleNavigationStateChange}
+      onReady={() => {
+        // Initial state check when navigation is ready
+        const state = navigationRef.current?.getRootState()
+        if (state) {
+          setHideTabBar(shouldHideTabBar(state))
+        }
+      }}
+    >
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {isAuthenticated ? (
           <Stack.Screen name="MainApp" options={{ headerShown: false }}>

@@ -1,11 +1,9 @@
 
 "use client"
 
-import React from "react"
-
-import { useState } from "react"
+import React, { useState } from "react"
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, TextInput, ScrollView, Modal } from "react-native"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useRoute } from "@react-navigation/native"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import Icon from "react-native-vector-icons/Ionicons"
 import type { SendParcelStackParamList } from "../../types/navigation"
@@ -24,7 +22,12 @@ interface SelectionOption {
 
 export default function PaymentDetails() {
   const navigation = useNavigation<PaymentDetailsNavigationProp>()
+  const route = useRoute<any>()
   const { deliveryDetails, updateDeliveryDetails } = useOrder()
+
+  // Check if coming from scheduled screen
+  const fromScheduled = route.params?.fromScheduled || false
+  const deliveryId = route.params?.deliveryId
 
   const [payer, setPayer] = useState(deliveryDetails.payer || "")
   const [paymentMethod, setPaymentMethod] = useState(deliveryDetails.paymentMethod || "")
@@ -74,6 +77,13 @@ export default function PaymentDetails() {
   const handleDeliveryFeeConfirm = () => {
     setIsDeliveryFeeModalVisible(false)
     navigation.navigate("SearchRiders", { amount })
+  }
+
+  // Handle edit schedule from delivery fee modal
+  const handleEditSchedule = () => {
+    setIsDeliveryFeeModalVisible(false)
+    // Navigate back to edit the scheduled delivery
+    navigation.navigate("RideHistory")
   }
 
   // Update the handleFeeConfirm function to navigate to SearchRider (not SearchRiders)
@@ -358,6 +368,7 @@ export default function PaymentDetails() {
         visible={isDeliveryFeeModalVisible}
         onClose={() => setIsDeliveryFeeModalVisible(false)}
         onConfirm={handleDeliveryFeeConfirm}
+        onEditSchedule={handleEditSchedule}
         amount={amount}
         onAmountChange={setAmount}
       />

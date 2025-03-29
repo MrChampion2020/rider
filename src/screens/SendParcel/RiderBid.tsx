@@ -1,71 +1,93 @@
+
+
+
 "use client"
 
-import { useState } from "react"
-import { ImageSourcePropType } from "react-native"
+import { useState, useEffect } from "react"
 import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Image } from "react-native"
 import Icon from "react-native-vector-icons/Ionicons"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useRoute } from "@react-navigation/native"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import type { SendParcelStackParamList } from "../../types/navigation"
 import pp from "../../assets/pp.png"
+import { useOrder } from "../../contexts/OrderContext"
+import { icons } from "../../constants/icons"
 
-type RiderBidsNavigationProp = NativeStackNavigationProp<SendParcelStackParamList, "RiderBids">
+type RiderBidsNavigationProp = NativeStackNavigationProp<SendParcelStackParamList, "RiderBid">
 
 interface Rider {
   id: string
   name: string
   rating: number
-  // image: 
   vehicleType: string
   vehicleColor: string
   distance: string
   price: string
 }
 
-export default function RiderBids({ route }: { route: { params: { amount: string } } }) {
+export default function RiderBids() {
   const navigation = useNavigation<RiderBidsNavigationProp>()
-  const { amount } = route.params
+  const route = useRoute<any>()
+  const { deliveryDetails } = useOrder()
+
+  // Get amount from route params or use default
+  const amount = route.params?.amount || "2,500"
 
   const [riders, setRiders] = useState<Rider[]>([
     {
       id: "1",
       name: "Maleek Oladimeji",
       rating: 5,
-      // image:
-      //   pp,
       vehicleType: "Bike",
       vehicleColor: "Black",
       distance: "3 min away",
-      price: "2,500",
+      price: amount,
     },
     {
       id: "2",
       name: "Maleek Oladimeji",
       rating: 5,
-      // image:
-      //  pp,
       vehicleType: "Bike",
       vehicleColor: "Black",
       distance: "3 min away",
-      price: "2,500",
+      price: amount,
     },
     {
       id: "3",
       name: "Maleek Oladimeji",
       rating: 5,
-      // image:
-      //  pp,
       vehicleType: "Bike",
       vehicleColor: "Black",
       distance: "3 min away",
-      price: "2,500",
+      price: amount,
     },
   ])
+
+  // Update rider prices when amount changes
+  useEffect(() => {
+    if (amount) {
+      setRiders((prevRiders) =>
+        prevRiders.map((rider) => ({
+          ...rider,
+          price: amount,
+        })),
+      )
+    }
+  }, [amount])
 
   const handleBookRider = (rider: Rider) => {
     navigation.navigate("RidesSummary", {
       rider,
       amount,
+    })
+  }
+
+  const handleSendBid = (rider: Rider) => {
+    // Navigate to the same screen as Book Rider
+    navigation.navigate("RidesSummary", {
+      rider,
+      amount,
+      fromBid: true, // Optional flag to indicate it came from a bid
     })
   }
 
@@ -79,32 +101,41 @@ export default function RiderBids({ route }: { route: { params: { amount: string
         <View style={styles.headerRight} />
       </View>
 
-      <ScrollView style={styles.content}>
+      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.myBidSection}>
           <Text style={styles.myBidTitle}>My Bid</Text>
           <View style={styles.myBidAmount}>
-            <Text style={styles.bidAmountText}>N 2,500</Text>
+            <Text style={styles.bidAmountText}>N {amount}</Text>
           </View>
         </View>
 
         <View style={styles.addressSection}>
           <View style={styles.addressItem}>
             <View style={styles.addressIconContainer}>
-              <Icon name="ellipse" size={10} color="#00A651" />
+              <Image source={icons.senderLocation} style={styles.locationIcon} />
             </View>
-            <View>
+            <View style={styles.addressContent}>
               <Text style={styles.addressLabel}>Sender Address</Text>
-              <Text style={styles.addressText}>No 1, alobalowo street, off saki iseyin express way, Iseyin,Oyo</Text>
+              <Text style={styles.addressText}>
+                {deliveryDetails.senderAddress || "No 1, alobalowo street, off saki iseyin express way, Iseyin,Oyo"}
+              </Text>
             </View>
           </View>
-          <View style={styles.addressDivider} />
+
+          {/* Dotted line connector */}
+          <View style={styles.dottedLineContainer}>
+            <View style={styles.dottedLine} />
+          </View>
+
           <View style={styles.addressItem}>
             <View style={styles.addressIconContainer}>
-              <Icon name="ellipse" size={10} color="#FF0000" />
+              <Image source={icons.receiverLocation} style={styles.locationIcon} />
             </View>
-            <View>
+            <View style={styles.addressContent}>
               <Text style={styles.addressLabel}>Receiver Address</Text>
-              <Text style={styles.addressText}>No 1, alobalowo street, off saki iseyin express way, Iseyin,Oyo</Text>
+              <Text style={styles.addressText}>
+                {deliveryDetails.receiverAddress || "No 1, alobalowo street, off saki iseyin express way, Iseyin,Oyo"}
+              </Text>
             </View>
           </View>
         </View>
@@ -127,7 +158,7 @@ export default function RiderBids({ route }: { route: { params: { amount: string
                   </View>
                 </View>
                 <View style={styles.priceTag}>
-                  <Text style={styles.priceText}>N 2,500</Text>
+                  <Text style={styles.priceText}>N {rider.price}</Text>
                 </View>
               </View>
 
@@ -147,7 +178,7 @@ export default function RiderBids({ route }: { route: { params: { amount: string
               </View>
 
               <View style={styles.actionButtons}>
-                <TouchableOpacity style={styles.sendBidButton}>
+                <TouchableOpacity style={styles.sendBidButton} onPress={() => handleSendBid(rider)}>
                   <Text style={styles.sendBidButtonText}>Send Bid</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.bookRiderButton} onPress={() => handleBookRider(rider)}>
@@ -166,7 +197,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F5F5F5",
-    paddingTop: 40
+    paddingTop: 30,
   },
   header: {
     flexDirection: "row",
@@ -203,6 +234,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 16,
     backgroundColor: "#FFFFFF",
+    borderBottomWidth: 1,
+    borderBottomColor: "#EEEEEE",
   },
   myBidTitle: {
     fontSize: 16,
@@ -226,17 +259,20 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: "#FFFFFF",
     marginBottom: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: "#EEEEEE",
+    position: "relative",
   },
   addressItem: {
     flexDirection: "row",
     alignItems: "flex-start",
     marginBottom: 8,
+    paddingLeft: 8,
   },
   addressIconContainer: {
-    marginRight: 8,
-    marginTop: 4,
+    marginRight: 12,
+    marginTop: 6,
+  },
+  addressContent: {
+    flex: 1,
   },
   addressLabel: {
     fontSize: 12,
@@ -247,26 +283,36 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#333333",
     lineHeight: 20,
-    maxWidth: "95%",
   },
-  addressDivider: {
-    height: 1,
-    backgroundColor: "#EEEEEE",
-    marginVertical: 8,
-    marginLeft: 4,
+  dottedLineContainer: {
+    position: "absolute",
+    left: 24,
+    top: 30,
+    bottom: 30,
+    alignItems: "center",
+  },
+  dottedLine: {
+    height: "55%",
+    width: 0.5,
+    borderStyle: "dashed",
+    borderWidth: 0.5,
+    borderColor: "#CCCCCC",
+    borderRadius: 1,
+    marginLeft: 9,
+    marginTop: 3,
   },
   ridersSection: {
     padding: 16,
   },
   riderCard: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 8,
+    borderRadius: 12,
     marginBottom: 16,
     padding: 16,
     shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 1 },
+    shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 2,
+    shadowRadius: 4,
     elevation: 2,
   },
   riderInfo: {
@@ -349,6 +395,11 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "600",
     color: "#FFFFFF",
+  },
+  locationIcon: {
+    width: 20,
+    height: 20,
+    resizeMode: "contain",
   },
 })
 
