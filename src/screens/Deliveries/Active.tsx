@@ -56,7 +56,7 @@ const ActiveDeliveries = () => {
 
   const handleDeliveryPress = (delivery: DeliveryItem) => {
     // Navigate to RideDetailsMap screen with the delivery ID
-    navigation.navigate("RideDetailsMap", { deliveryId: delivery.id })
+    navigation.navigate("RidesDetails", { deliveryId: delivery.id })
   }
 
   const renderDeliveryItem = ({ item }: { item: DeliveryItem }) => (

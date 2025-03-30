@@ -59,7 +59,7 @@ export default function DeliveredSummary({ route }: DeliverySummaryProps) {
               <Text style={styles.paymentMethodText}>Delivery fee paid by sender</Text>
             </View>
           </View>
-          <Text style={styles.totalAmount}>₦{amount}</Text>
+          <Text style={styles.totalAmount}>N{amount}</Text>
         </View>
 
         <View style={styles.summarySection}>

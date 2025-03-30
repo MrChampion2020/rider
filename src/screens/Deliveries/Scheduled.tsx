@@ -1,7 +1,7 @@
 
-
 "use client"
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from "react-native"
+import { useState } from "react"
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Alert } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import Icon from "react-native-vector-icons/Ionicons"
 import { colors } from "../../constants/colors"
@@ -19,10 +19,10 @@ interface DeliveryItem {
 }
 
 const ScheduledDeliveries = () => {
-  const navigation = useNavigation()
+  const navigation = useNavigation<any>()
 
   // Sample data
-  const deliveries: DeliveryItem[] = [
+  const [deliveries, setDeliveries] = useState<DeliveryItem[]>([
     {
       id: "ORD-12ESCJK3K",
       status: "Scheduled",
@@ -43,14 +43,57 @@ const ScheduledDeliveries = () => {
       scheduledDate: "23rd Feb,2025",
       scheduledTime: "11:24 AM",
     },
-  ]
+  ])
 
   const handleDeliveryPress = (delivery: DeliveryItem) => {
     navigation.navigate("DeliveryDetails", { deliveryId: delivery.id })
   }
 
+  const handleEdit = (deliveryId: string) => {
+    // Find the delivery to edit
+    const deliveryToEdit = deliveries.find((delivery) => delivery.id === deliveryId)
+
+    if (deliveryToEdit) {
+      // Navigate to LocationSelect screen with the delivery data
+      navigation.navigate("LocationSelect", {
+        deliveryId,
+        fromAddress: deliveryToEdit.fromAddress,
+        toAddress: deliveryToEdit.toAddress,
+        scheduledDate: deliveryToEdit.scheduledDate,
+        scheduledTime: deliveryToEdit.scheduledTime,
+        isEditing: true,
+      })
+    }
+  }
+
+  const handleDelete = (deliveryId: string) => {
+    // Show confirmation dialog
+    Alert.alert("Delete Scheduled Delivery", "Are you sure you want to delete this scheduled delivery?", [
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+      {
+        text: "Delete",
+        onPress: () => {
+          // Remove the delivery from the list
+          setDeliveries(deliveries.filter((delivery) => delivery.id !== deliveryId))
+        },
+        style: "destructive",
+      },
+    ])
+  }
+
+  const handleProceed = (delivery: DeliveryItem) => {
+    // Navigate to payment screen with the delivery data
+    navigation.navigate("PaymentDetails", {
+      deliveryId: delivery.id,
+      fromScheduled: true,
+    })
+  }
+
   const renderDeliveryItem = ({ item }: { item: DeliveryItem }) => (
-    <TouchableOpacity style={styles.deliveryCard} onPress={() => handleDeliveryPress(item)}>
+    <View style={styles.deliveryCard}>
       <View style={styles.deliveryHeader}>
         <Text style={styles.orderId}>{item.id}</Text>
         <View style={styles.statusBadge}>
@@ -94,10 +137,15 @@ const ScheduledDeliveries = () => {
         </View>
       </View>
 
-      <TouchableOpacity style={styles.proceedButton}>
-        <Text style={styles.proceedButtonText}>Proceed</Text>
-      </TouchableOpacity>
-    </TouchableOpacity>
+      <View style={styles.actionButtonsContainer}>
+        <TouchableOpacity style={styles.editButton} onPress={() => handleEdit(item.id)}>
+          <Text style={styles.editButtonText}>Edit</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(item.id)}>
+          <Text style={styles.deleteButtonText}>Delete</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   )
 
   return (
@@ -205,6 +253,38 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: "#000000",
     marginLeft: 8,
+  },
+  actionButtonsContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  editButton: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    borderRadius: 8,
+    paddingVertical: 12,
+    alignItems: "center",
+    marginRight: 8,
+  },
+  editButtonText: {
+    color: colors.primary,
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  deleteButton: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "#DDDDDD",
+    borderRadius: 8,
+    paddingVertical: 12,
+    alignItems: "center",
+    marginLeft: 8,
+  },
+  deleteButtonText: {
+    color: "#666666",
+    fontSize: 16,
+    fontWeight: "600",
   },
   proceedButton: {
     backgroundColor: colors.primary,

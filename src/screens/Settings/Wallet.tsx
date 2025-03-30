@@ -159,7 +159,7 @@ export default function WalletScreen() {
         <Text style={styles.transactionDate}>{item.date}</Text>
       </View>
       <Text style={[styles.transactionAmount, item.type === "topup" ? styles.amountPositive : styles.amountNegative]}>
-        {item.type === "topup" ? "+" : "-"}₦{item.amount.toLocaleString()}
+        {item.type === "topup" ? "+" : "-"}N{item.amount.toLocaleString()}
       </Text>
     </View>
   )
@@ -179,7 +179,7 @@ export default function WalletScreen() {
 
       <View style={styles.balanceContainer}>
         <Text style={styles.balanceLabel}>Available Balance</Text>
-        <Text style={styles.balanceAmount}>₦ {balance.toLocaleString()}</Text>
+        <Text style={styles.balanceAmount}>N {balance.toLocaleString()}</Text>
       </View>
 
       <View style={styles.actionsContainer}>
@@ -299,7 +299,7 @@ export default function WalletScreen() {
 
             <View style={styles.amountPreview}>
               <Icon name="cash-outline" size={20} color="#800080" />
-              <Text style={styles.amountPreviewText}>₦ 200,000</Text>
+              <Text style={styles.amountPreviewText}>N 200,000</Text>
             </View>
 
             <View style={styles.formGroup}>

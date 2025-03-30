@@ -124,6 +124,21 @@ function DeliveriesNavigator() {
       <DeliveriesStack.Screen name="RideHistory" component={RideHistory} />
       <DeliveriesStack.Screen name="RidesDetails" component={RidesDetails} />
       <DeliveriesStack.Screen name="RideSummary" component={RideSummary} />
+      <DeliveriesStack.Screen name="LocationSelect" component={LocationSelect} />
+      <DeliveriesStack.Screen name="AddressSelect" component={AddressSelect} />
+      <DeliveriesStack.Screen name="MapSelect" component={MapSelect} />
+      <DeliveriesStack.Screen name="ScheduleParcel" component={ScheduleParcel} />
+      <DeliveriesStack.Screen name="PaymentDetails" component={PaymentDetails} />
+      <DeliveriesStack.Screen  name="SenderReceiverDetails" component={SenderReceiverDetails} />
+      <DeliveriesStack.Screen name="ParcelDetails" component={ParcelDetails} />
+      <DeliveriesStack.Screen  name="DeliverySummary" component={DeliverySummary} />
+      <DeliveriesStack.Screen  name="SearchRiders" component={SearchRidersScreen} />
+      <DeliveriesStack.Screen  name="SearchRider" component={SearchRider} />
+      <DeliveriesStack.Screen  name="BankDetails" component={BankDetails} />
+      <DeliveriesStack.Screen  name="RideConfirmation" component={RideConfirmationScreen} />
+      <DeliveriesStack.Screen  name="RiderBid" component={RiderBids} />
+      <DeliveriesStack.Screen name="RidesSummary" component={RidesSummary} />
+      <DeliveriesStack.Screen  name="DeliveredSummary" component={DeliveredSummary} />
     </DeliveriesStack.Navigator>
   )
 }

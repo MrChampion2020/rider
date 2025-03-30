@@ -1,192 +1,203 @@
 
-"use client"
-import { useState } from "react"
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, SafeAreaView, StatusBar } from "react-native"
-import { useNavigation } from "@react-navigation/native"
-import Icon from "react-native-vector-icons/Ionicons"
-import { colors } from "../../constants/colors"
 
-// Define the delivery item type
-interface DeliveryItem {
+"use client"
+
+import { useState } from "react"
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, ScrollView, Image, StatusBar } from "react-native"
+import Icon from "react-native-vector-icons/Ionicons"
+import { useNavigation } from "@react-navigation/native"
+import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import type { SendParcelStackParamList } from "../../types/navigation"
+import pp from "../../assets/images/pp.png"
+
+type RideHistoryNavigationProp = NativeStackNavigationProp<SendParcelStackParamList, "RideHistory">
+
+interface RideHistoryItem {
   id: string
-  status: "Scheduled"
-  fromAddress: string
-  toAddress: string
+  orderId: string
+  status: "Order" | "Picked up" | "In transit" | "Delivered"
+  from: string
+  to: string
   orderTime: string
   deliveryTime: string
-  scheduledDate: string
-  scheduledTime: string
-  isEdited?: boolean
+  riderName: string
+  riderImage: string
+  riderRating: number
 }
 
-const RideHistory = () => {
-  const navigation = useNavigation<any>()
-  const [activeTab, setActiveTab] = useState("Scheduled")
-  const [scheduledDeliveries, setScheduledDeliveries] = useState<DeliveryItem[]>([
+export default function RideHistory() {
+  const navigation = useNavigation<RideHistoryNavigationProp>()
+  const [activeTab, setActiveTab] = useState<"Scheduled" | "Active" | "Delivered">("Active")
+
+  const [rides, setRides] = useState<RideHistoryItem[]>([
     {
-      id: "ORD-12ESCJK3K",
-      status: "Scheduled",
-      fromAddress: "No 1, abcd street...",
-      toAddress: "No 1, abcd street....",
+      id: "1",
+      orderId: "ORD-12ESCJK3K",
+      status: "In transit",
+      from: "No 1, abcd street...",
+      to: "No 1, abcd street...",
       orderTime: "11:24 AM",
-      deliveryTime: "Scheduled",
-      scheduledDate: "23rd Feb,2025",
-      scheduledTime: "11:24 AM",
-      isEdited: false,
+      deliveryTime: "01:22 PM",
+      riderName: "Maleek Oladimeji",
+      riderImage:
+       pp,
+      riderRating: 5,
     },
     {
-      id: "ORD-12ESCJK3K",
-      status: "Scheduled",
-      fromAddress: "No 1, abcd street...",
-      toAddress: "No 1, abcd street....",
+      id: "2",
+      orderId: "ORD-12ESCJK3K",
+      status: "In transit",
+      from: "No 1, abcd street...",
+      to: "No 1, abcd street...",
       orderTime: "11:24 AM",
-      deliveryTime: "Scheduled",
-      scheduledDate: "23rd Feb,2025",
-      scheduledTime: "11:24 AM",
-      isEdited: false,
+      deliveryTime: "01:22 PM",
+      riderName: "Maleek Oladimeji",
+      riderImage:
+        "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/iPhone%2014%20%26%2015%20Pro%20Max%20-%2064-JyHllSe6QIfG3bCAR91gxzI12naOcC.png",
+      riderRating: 5,
     },
   ])
 
-  const handleGoBack = () => {
-    navigation.goBack()
+  const handleRidePress = (ride: RideHistoryItem) => {
+    navigation.navigate("RidesDetails", { rideId: ride.id })
   }
-
-  const handleTabPress = (tab: string) => {
-    setActiveTab(tab)
-  }
-
-  const handleEdit = (deliveryId: string) => {
-    // Mark the delivery as edited
-    setScheduledDeliveries(
-      scheduledDeliveries.map((delivery) => (delivery.id === deliveryId ? { ...delivery, isEdited: true } : delivery)),
-    )
-
-    // Navigate to edit screen with the delivery data
-    // In a real app, you would pass the actual delivery data
-    navigation.navigate("ScheduleParcel", {
-      deliveryId,
-      fromAddress: "No 1, abcd street...",
-      toAddress: "No 1, abcd street....",
-      scheduledDate: "23rd Feb,2025",
-      scheduledTime: "11:24 AM",
-    })
-  }
-
-  const handleDelete = (deliveryId: string) => {
-    // Remove the delivery from the list
-    setScheduledDeliveries(scheduledDeliveries.filter((delivery) => delivery.id !== deliveryId))
-  }
-
-  const handleProceed = (delivery: DeliveryItem) => {
-    // Navigate to payment screen with the delivery data
-    navigation.navigate("PaymentDetails", {
-      deliveryId: delivery.id,
-      fromScheduled: true,
-    })
-  }
-
-  const renderDeliveryItem = ({ item }: { item: DeliveryItem }) => (
-    <View style={styles.deliveryCard}>
-      <View style={styles.deliveryHeader}>
-        <Text style={styles.orderId}>{item.id}</Text>
-        <View style={styles.statusBadge}>
-          <Text style={styles.statusText}>{item.status}</Text>
-        </View>
-      </View>
-
-      <View style={styles.addressContainer}>
-        <View style={styles.addressColumn}>
-          <Text style={styles.addressLabel}>From</Text>
-          <Text style={styles.addressText} numberOfLines={1}>
-            {item.fromAddress}
-          </Text>
-
-          <Text style={styles.timeLabel}>Time of Order</Text>
-          <Text style={styles.timeText}>{item.orderTime}</Text>
-        </View>
-
-        <View style={styles.addressColumn}>
-          <Text style={styles.addressLabel}>To</Text>
-          <Text style={styles.addressText} numberOfLines={1}>
-            {item.toAddress}
-          </Text>
-
-          <Text style={styles.timeLabel}>Estimated Delivery</Text>
-          <Text style={styles.timeText}>{item.deliveryTime}</Text>
-        </View>
-      </View>
-
-      <View style={styles.scheduledContainer}>
-        <Text style={styles.scheduledTitle}>Ride Scheduled</Text>
-        <View style={styles.scheduledDetails}>
-          <View style={styles.dateContainer}>
-            <Icon name="calendar-outline" size={20} color={colors.primary} />
-            <Text style={styles.scheduledText}>{item.scheduledDate}</Text>
-          </View>
-          <View style={styles.timeContainer}>
-            <Icon name="time-outline" size={20} color={colors.primary} />
-            <Text style={styles.scheduledText}>{item.scheduledTime}</Text>
-          </View>
-        </View>
-      </View>
-
-      {item.isEdited ? (
-        <TouchableOpacity style={styles.proceedButton} onPress={() => handleProceed(item)}>
-          <Text style={styles.proceedButtonText}>Proceed</Text>
-        </TouchableOpacity>
-      ) : (
-        <View style={styles.actionButtonsContainer}>
-          <TouchableOpacity style={styles.editButton} onPress={() => handleEdit(item.id)}>
-            <Text style={styles.editButtonText}>Edit</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.deleteButton} onPress={() => handleDelete(item.id)}>
-            <Text style={styles.deleteButtonText}>Delete</Text>
-          </TouchableOpacity>
-        </View>
-      )}
-    </View>
-  )
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#F5F5F5" />
-
+      <StatusBar barStyle="dark-content" />
       <View style={styles.header}>
-        <TouchableOpacity onPress={handleGoBack} style={styles.backButton}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Icon name="chevron-back" size={24} color="#000000" />
         </TouchableOpacity>
         <Text style={styles.headerTitle}>Ride History</Text>
         <View style={styles.headerRight} />
       </View>
 
-      <View style={styles.tabContainer}>
-        <TouchableOpacity
-          style={[styles.tab, activeTab === "Scheduled" && styles.activeTab]}
-          onPress={() => handleTabPress("Scheduled")}
-        >
-          <Text style={[styles.tabText, activeTab === "Scheduled" && styles.activeTabText]}>Scheduled</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, activeTab === "Active" && styles.activeTab]}
-          onPress={() => handleTabPress("Active")}
-        >
-          <Text style={[styles.tabText, activeTab === "Active" && styles.activeTabText]}>Active</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, activeTab === "Delivered" && styles.activeTab]}
-          onPress={() => handleTabPress("Delivered")}
-        >
-          <Text style={[styles.tabText, activeTab === "Delivered" && styles.activeTabText]}>Delivered</Text>
-        </TouchableOpacity>
+      <View style={styles.tabsWrapper}>
+        <View style={styles.tabContainer}>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === "Scheduled" && styles.activeTab]}
+            onPress={() => setActiveTab("Scheduled")}
+          >
+            <Text style={[styles.tabText, activeTab === "Scheduled" && styles.activeTabText]}>Scheduled</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === "Active" && styles.activeTab]}
+            onPress={() => setActiveTab("Active")}
+          >
+            <Text style={[styles.tabText, activeTab === "Active" && styles.activeTabText]}>Active</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.tab, activeTab === "Delivered" && styles.activeTab]}
+            onPress={() => setActiveTab("Delivered")}
+          >
+            <Text style={[styles.tabText, activeTab === "Delivered" && styles.activeTabText]}>Delivered</Text>
+          </TouchableOpacity>
+        </View>
       </View>
 
-      <FlatList
-        data={scheduledDeliveries}
-        renderItem={renderDeliveryItem}
-        keyExtractor={(item, index) => `${item.id}-${index}`}
-        contentContainerStyle={styles.listContainer}
-        showsVerticalScrollIndicator={false}
-      />
+      <ScrollView style={styles.content} contentContainerStyle={styles.contentContainer}>
+        {rides.map((ride) => (
+          <TouchableOpacity key={ride.id} style={styles.rideCard} onPress={() => handleRidePress(ride)}>
+            <View style={styles.rideHeader}>
+              <Text style={styles.orderId}>{ride.orderId}</Text>
+              <View style={styles.statusBadge}>
+                <Text style={styles.statusText}>In Transit</Text>
+              </View>
+            </View>
+
+            <View style={styles.rideDetails}>
+              {/* Address section with columns */}
+              <View style={styles.addressSection}>
+                <View style={styles.addressColumns}>
+                  <View style={styles.addressColumn}>
+                    <Text style={styles.addressLabel}>From</Text>
+                    <Text style={styles.addressValue}>{ride.from}</Text>
+                  </View>
+                  <View style={styles.addressColumn}>
+                    <Text style={styles.addressLabel}>To</Text>
+                    <Text style={styles.addressValue}>{ride.to}</Text>
+                  </View>
+                </View>
+              </View>
+
+              {/* Time section with columns */}
+              <View style={styles.timeSection}>
+                <View style={styles.timeColumns}>
+                  <View style={styles.timeColumn}>
+                    <Text style={styles.timeLabel}>Time of Order</Text>
+                    <Text style={styles.timeValue}>{ride.orderTime}</Text>
+                  </View>
+                  <View style={styles.timeColumn}>
+                    <Text style={styles.timeLabel}>Estimated Delivery</Text>
+                    <Text style={styles.timeValue}>{ride.deliveryTime}</Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.progressContainer}>
+              {/* Continuous progress line */}
+              <View style={styles.progressLineContainer}>
+                <View style={styles.activeLine} />
+                <View style={styles.inactiveLine} />
+              </View>
+
+              {/* Progress steps */}
+              <View style={styles.progressTracker}>
+                <View style={styles.progressStepContainer}>
+                  <View style={styles.progressDotOuter}>
+                    <View style={styles.progressDotInner} />
+                  </View>
+                  <Text style={styles.progressLabel}>Order</Text>
+                </View>
+                <View style={styles.progressStepContainer}>
+                  <View style={styles.progressDotOuter}>
+                    <View style={styles.progressDotInner} />
+                  </View>
+                  <Text style={styles.progressLabel}>Picked up</Text>
+                </View>
+                <View style={styles.progressStepContainer}>
+                  <View style={styles.progressDotOuter}>
+                    <View style={styles.progressDotInner} />
+                  </View>
+                  <Text style={styles.progressLabel}>In transit</Text>
+                </View>
+                <View style={styles.progressStepContainer}>
+                  <View style={[styles.progressDotOuter, styles.inactiveDotOuter]}>
+                    <View style={[styles.progressDotInner, styles.inactiveDotInner]} />
+                  </View>
+                  <Text style={styles.progressLabel}>Delivered</Text>
+                </View>
+              </View>
+            </View>
+
+            <View style={styles.riderSection}>
+              <Image
+                source={pp}
+                style={styles.riderImage}
+                defaultSource={{ uri: "/placeholder.svg?height=50&width=50" }}
+              />
+              <View style={styles.riderInfo}>
+                <Text style={styles.riderName}>{ride.riderName}</Text>
+                <View style={styles.ratingContainer}>
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Icon key={star} name="star" size={14} color="#800080" />
+                  ))}
+                </View>
+              </View>
+              <View style={styles.riderActions}>
+                <TouchableOpacity style={styles.riderActionButton}>
+                  <Icon name="chatbubble-ellipses" size={24} color="#800080" />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.riderActionButton}>
+                  <Icon name="call" size={24} color="#800080" />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
     </SafeAreaView>
   )
 }
@@ -202,12 +213,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingHorizontal: 16,
     paddingVertical: 16,
+    backgroundColor: "#FFFFFF",
   },
   backButton: {
     width: 40,
     height: 40,
     borderRadius: 20,
-    backgroundColor: "#EEEEEE",
+    backgroundColor: "#F5F5F5",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -215,25 +227,30 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
     color: "#000000",
+    textAlign: "center",
   },
   headerRight: {
     width: 40,
   },
+  tabsWrapper: {
+    backgroundColor: "#FFFFFF",
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+  },
   tabContainer: {
     flexDirection: "row",
-    backgroundColor: "#EEEEEE",
+    backgroundColor: "#F5F5F5",
     borderRadius: 8,
-    margin: 16,
     padding: 4,
   },
   tab: {
     flex: 1,
     paddingVertical: 12,
     alignItems: "center",
-    borderRadius: 6,
+    borderRadius: 4,
   },
   activeTab: {
-    backgroundColor: colors.primary,
+    backgroundColor: "#800080",
   },
   tabText: {
     fontSize: 14,
@@ -242,23 +259,26 @@ const styles = StyleSheet.create({
   },
   activeTabText: {
     color: "#FFFFFF",
+    fontWeight: "600",
   },
-  listContainer: {
+  content: {
+    flex: 1,
+  },
+  contentContainer: {
     padding: 16,
-    paddingTop: 0,
   },
-  deliveryCard: {
+  rideCard: {
     backgroundColor: "#FFFFFF",
-    borderRadius: 12,
-    padding: 16,
+    borderRadius: 16,
     marginBottom: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
+    padding: 16,
+    shadowColor: "#000000",
+    shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowRadius: 2,
     elevation: 2,
   },
-  deliveryHeader: {
+  rideHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
@@ -270,118 +290,154 @@ const styles = StyleSheet.create({
     color: "#000000",
   },
   statusBadge: {
-    backgroundColor: "#EEEEEE",
+    backgroundColor: "#800080",
     paddingHorizontal: 12,
-    paddingVertical: 4,
+    paddingVertical: 6,
     borderRadius: 16,
   },
   statusText: {
     fontSize: 12,
     fontWeight: "500",
-    color: "#666666",
+    color: "#FFFFFF",
   },
-  addressContainer: {
-    flexDirection: "row",
+  rideDetails: {
     marginBottom: 16,
   },
-  addressColumn: {
-    flex: 1,
-  },
-  addressLabel: {
-    fontSize: 12,
-    color: "#666666",
-    marginBottom: 4,
-  },
-  addressText: {
-    fontSize: 14,
-    color: "#000000",
+  addressSection: {
     marginBottom: 12,
   },
-  timeLabel: {
-    fontSize: 12,
-    color: "#666666",
-    marginBottom: 4,
-  },
-  timeText: {
-    fontSize: 14,
-    color: "#000000",
-  },
-  scheduledContainer: {
-    backgroundColor: "#F5F5F5",
-    padding: 12,
-    borderRadius: 8,
-    marginBottom: 16,
-  },
-  scheduledTitle: {
-    fontSize: 14,
-    color: "#666666",
-    marginBottom: 8,
-    textAlign: "center",
-  },
-  scheduledDetails: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  dateContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginRight: 16,
-  },
-  timeContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  scheduledText: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: "#000000",
-    marginLeft: 8,
-  },
-  actionButtonsContainer: {
+  addressColumns: {
     flexDirection: "row",
     justifyContent: "space-between",
   },
-  editButton: {
+  addressColumn: {
     flex: 1,
-    borderWidth: 1,
-    borderColor: colors.primary,
-    borderRadius: 8,
-    paddingVertical: 12,
-    alignItems: "center",
     marginRight: 8,
   },
-  editButtonText: {
-    color: colors.primary,
-    fontSize: 16,
-    fontWeight: "600",
-  },
-  deleteButton: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: "#DDDDDD",
-    borderRadius: 8,
-    paddingVertical: 12,
-    alignItems: "center",
-    marginLeft: 8,
-  },
-  deleteButtonText: {
+  addressLabel: {
+    fontSize: 14,
     color: "#666666",
-    fontSize: 16,
-    fontWeight: "600",
+    marginBottom: 4,
   },
-  proceedButton: {
-    backgroundColor: colors.primary,
-    borderRadius: 8,
-    paddingVertical: 12,
+  addressValue: {
+    fontSize: 14,
+    color: "#000000",
+  },
+  timeSection: {
+    marginBottom: 12,
+  },
+  timeColumns: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  timeColumn: {
+    flex: 1,
+    marginRight: 8,
+  },
+  timeLabel: {
+    fontSize: 14,
+    color: "#666666",
+    marginBottom: 4,
+  },
+  timeValue: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#000000",
+  },
+  progressContainer: {
+    marginBottom: 16,
+    height: 40,
+    position: "relative",
+  },
+  progressLineContainer: {
+    position: "absolute",
+    flexDirection: "row",
+    top: 8,
+    left: 8,
+    right: 8,
+    height: 1,
+    zIndex: 1,
+  },
+  activeLine: {
+    flex: 3,
+    height: 1,
+    backgroundColor: "#800080",
+  },
+  inactiveLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: "#CCCCCC",
+  },
+  progressTracker: {
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    zIndex: 2,
+  },
+  progressStepContainer: {
     alignItems: "center",
+    width: 70,
   },
-  proceedButtonText: {
-    color: "#FFFFFF",
-    fontSize: 16,
+  progressDotOuter: {
+    width: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: "#800080",
+    alignItems: "center",
+    justifyContent: "center",
+    zIndex: 2,
+  },
+  progressDotInner: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: "#FFFFFF",
+  },
+  inactiveDotOuter: {
+    backgroundColor: "#CCCCCC",
+  },
+  inactiveDotInner: {
+    backgroundColor: "#FFFFFF",
+  },
+  progressLabel: {
+    fontSize: 12,
+    color: "#666666",
+    marginTop: 4,
+    textAlign: "center",
+  },
+  riderSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderTopWidth: 1,
+    borderTopColor: "#EEEEEE",
+    paddingTop: 16,
+  },
+  riderImage: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    marginRight: 12,
+  },
+  riderInfo: {
+    flex: 1,
+  },
+  riderName: {
+    fontSize: 14,
     fontWeight: "600",
+    color: "#000000",
+    marginBottom: 4,
+  },
+  ratingContainer: {
+    flexDirection: "row",
+  },
+  riderActions: {
+    flexDirection: "row",
+  },
+  riderActionButton: {
+    width: 40,
+    height: 40,
+    alignItems: "center",
+    justifyContent: "center",
   },
 })
-
-export default RideHistory
 
