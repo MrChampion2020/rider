@@ -1,41 +1,45 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  SafeAreaView,
-  TouchableOpacity,
-} from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { GradientBackground } from "./../../components/BackgroundGradient";
-import { CodeInput } from "./../../components/CodeInput";
-import { Button } from "./../../components/Button";
-import { colors } from "./../../constants/colors";
+
+"use client"
+
+import { useState, useEffect } from "react"
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from "react-native"
+import { useNavigation } from "@react-navigation/native"
+import { GradientBackground } from "./../../components/BackgroundGradient"
+import { CodeInput } from "./../../components/CodeInput"
+import { Button } from "./../../components/Button"
+import { colors } from "./../../constants/colors"
+import { useAuth } from "../../contexts/AuthContext"
 
 const Verify = () => {
-  const [timeLeft, setTimeLeft] = useState(59);
-  const navigation = useNavigation();
+  const [timeLeft, setTimeLeft] = useState(59)
+  const navigation = useNavigation()
+  const { login } = useAuth()
 
   useEffect(() => {
     if (timeLeft > 0) {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-      return () => clearTimeout(timer);
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000)
+      return () => clearTimeout(timer)
     }
-  }, [timeLeft]);
+  }, [timeLeft])
 
   const handleCodeComplete = (code: string) => {
-    console.log("Code entered:", code);
+    console.log("Code entered:", code)
     // We will Handle verification logic here
-  };
+  }
+
+  const handleProceed = async () => {
+    // Login the user
+    await login()
+    // Navigate to the main app
+    navigation.navigate("User")
+  }
 
   return (
     <GradientBackground>
       <SafeAreaView style={styles.container}>
         <View style={styles.content}>
           <Text style={styles.title}>Verify</Text>
-          <Text style={styles.subtitle}>
-            Verify your phone number by entering the 5 - digit code
-          </Text>
+          <Text style={styles.subtitle}>Verify your phone number by entering the 5 - digit code</Text>
 
           <View style={styles.form}>
             <View style={styles.headerRow}>
@@ -45,23 +49,14 @@ const Verify = () => {
               </TouchableOpacity>
             </View>
 
-            <CodeInput
-              length={5}
-              onCodeComplete={handleCodeComplete}
-              allowBackspace={true}
-            />
+            <CodeInput length={5} onCodeComplete={handleCodeComplete} allowBackspace={true} />
 
-            {/* <Button title="Proceed" onPress={() => {RideDetails}} /> */}
-            <Button
-              title="Proceed"
-              onPress={() => navigation.navigate("User")}
-            />
+            <Button title="Proceed" onPress={handleProceed} />
 
             <Text style={styles.timerText}>
               Code will be resent in{" "}
               <Text style={styles.timer}>
-                {String(Math.floor(timeLeft / 60)).padStart(2, "0")}:
-                {String(timeLeft % 60).padStart(2, "0")}
+                {String(Math.floor(timeLeft / 60)).padStart(2, "0")}:{String(timeLeft % 60).padStart(2, "0")}
               </Text>{" "}
               sec
             </Text>
@@ -69,8 +64,8 @@ const Verify = () => {
         </View>
       </SafeAreaView>
     </GradientBackground>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -125,6 +120,7 @@ const styles = StyleSheet.create({
   timer: {
     color: colors.primary,
   },
-});
+})
 
-export default Verify;
+export default Verify
+

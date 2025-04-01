@@ -142,7 +142,7 @@ export default function NotificationsScreen() {
       case "delivery":
         if (notification.data?.deliveryId) {
           navigation.navigate("Delivery", {
-            screen: "RideSummary",
+            screen: "RidesSummary",
             params: { deliveryId: notification.data.deliveryId },
           })
         }
@@ -245,7 +245,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F5F5F5",
-    marginBottom: 110
+    marginBottom: 115
   },
   header: {
     flexDirection: "row",

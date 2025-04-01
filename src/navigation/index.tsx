@@ -10,6 +10,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 // Import the TabBar component
 import { TabBar } from "../components/TabBar"
 
+// Import Auth Context
+import { useAuth } from "../contexts/AuthContext"
+
 // Registration Screens
 import Onboard from "../screens/register/Onboard"
 import Login from "../screens/register/Login"
@@ -103,18 +106,24 @@ function SendParcelNavigator() {
 }
 
 function SettingsNavigator() {
+  const { logout } = useAuth()
+
   return (
     <SettingsStack.Navigator screenOptions={{ headerShown: false }}>
-      <SettingsStack.Screen name="SettingsMain" component={SettingsScreen} />
+      <SettingsStack.Screen name="SettingsMain">
+        {(props) => <SettingsScreen {...props} onLogout={logout} />}
+      </SettingsStack.Screen>
       <SettingsStack.Screen name="Wallet" component={WalletScreen} />
       <SettingsStack.Screen name="Support" component={SupportScreen} />
       <SettingsStack.Screen name="Address" component={AddressScreen} />
       <SettingsStack.Screen name="Notifications" component={NotificationsScreen} />
       <SettingsStack.Screen name="FAQs" component={FAQsScreen} />
       <SettingsStack.Screen name="EditProfile" component={EditProfileScreen} />
+      <SettingsStack.Screen name="RidesSummary" component={RidesSummary} />
     </SettingsStack.Navigator>
   )
 }
+
 
 function DeliveriesNavigator() {
   return (
@@ -143,6 +152,7 @@ function DeliveriesNavigator() {
   )
 }
 
+
 function HomeStack() {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -153,6 +163,7 @@ function HomeStack() {
       <Stack.Screen name="RideSummary" component={RideSummary} />
       <Stack.Screen name="DeliveryDetails" component={DeliveryDetails} />
       <Stack.Screen name="RideDetailsMap" component={RideDetailsMap} />
+      <Stack.Screen name="RidesDetails" component={RidesDetails} />
     </Stack.Navigator>
   )
 }
@@ -182,12 +193,13 @@ function AuthStack() {
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="Verify" component={Verify} />
       <Stack.Screen name="ChangePassword" component={ChangePassword} />
+      <Stack.Screen name="User" component={User} />
     </Stack.Navigator>
   )
 }
 
 export function Navigation() {
-  const [isAuthenticated] = useState(true) // Replace with actual auth state
+  const { isAuthenticated } = useAuth()
   const [currentTab, setCurrentTab] = useState("Home")
   const [hideTabBar, setHideTabBar] = useState(false)
   const navigationRef = useRef<any>(null)
@@ -200,31 +212,50 @@ export function Navigation() {
     }
   }
 
+
   // This function will determine if we should hide the tab bar based on the current route
-  const shouldHideTabBar = (state: any): boolean => {
-    if (!state) return false
+const shouldHideTabBar = (state: any): boolean => {
+  if (!state) return false
 
-    // Get the current active route
-    const routes = state.routes
-    const currentRoute = routes[state.index]
+  // Get the current active route
+  const routes = state.routes
+  const currentRoute = routes[state.index]
 
-    // Check if we're in the Add (SendParcel) tab
-    if (currentRoute.name === "Add") {
-      return true
-    }
-
-    // Check if we're in the Deliveries tab
-    if (currentRoute.name === "Deliveries") {
-      return true
-    }
-
-    // For nested navigators, we need to check their state too
-    if (currentRoute.state) {
-      return shouldHideTabBar(currentRoute.state)
-    }
-
-    return false
+  // Check if we're in the Add (SendParcel) tab
+  if (currentRoute.name === "Add") {
+    return true
   }
+
+  // Check if we're in the Deliveries tab
+  if (currentRoute.name === "Deliveries") {
+    return true
+  }
+
+  // Check if the current screen is RidesDetails
+  if (currentRoute.name === "RidesDetails") {
+    return true
+  }
+
+  // For nested navigators, we need to check their state too
+  if (currentRoute.state) {
+    // Check if any screen in the nested navigator is RidesDetails
+    const nestedRoutes = currentRoute.state.routes
+    const nestedCurrentRoute = nestedRoutes[currentRoute.state.index]
+    
+    if (nestedCurrentRoute.name === "RidesDetails") {
+      return true
+    }
+    
+    // Continue checking deeper nested states
+    return shouldHideTabBar(currentRoute.state)
+  }
+
+  return false
+}
+
+
+
+
 
   // Function to handle navigation state changes
   const handleNavigationStateChange = (state: any) => {

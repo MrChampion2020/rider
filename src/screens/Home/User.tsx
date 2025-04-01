@@ -102,6 +102,12 @@ export default function User() {
     // Navigate to withdraw screen
   };
 
+
+  const handleTrackPress = (delivery: DeliveryItem) => {
+    // Navigate to RideDetailsMap screen with the delivery ID
+    navigation.navigate("RidesDetails", { deliveryId: delivery.id })
+  }
+
   return (
     <GradientBackground>
       <SafeAreaView style={styles.safeArea}>
@@ -163,11 +169,14 @@ export default function User() {
               label="Send Parcel"
               onPress={() => handleActionPress("Send Parcel")}
             />
+
             <ActionButton
               icon="locate"
               label="Track Parcel"
-              onPress={() => handleActionPress("Track Parcel")}
+              onPress={() => handleTrackPress("Track Parcel")}
             />
+
+
             <ActionButton
               icon="time"
               label="Schedule"

@@ -251,9 +251,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#F5F5F5",
-    paddingTop: 30,
+    paddingTop: 15,
     height: "auto",
-    marginBottom: 110
+    marginBottom: 120
   },
   header: {
     flexDirection: "row",
@@ -270,6 +270,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#EEEEEE",
     alignItems: "center",
     justifyContent: "center",
+    marginRight: 5
   },
   headerTitle: {
     fontSize: 18,

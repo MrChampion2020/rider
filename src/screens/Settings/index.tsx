@@ -3,28 +3,39 @@
 "use client"
 
 import { useState } from "react"
-import { 
-  View, 
-  Text, 
-  StyleSheet, 
-  TouchableOpacity, 
-  SafeAreaView, 
-  Image, 
-  Modal, 
-  ScrollView,
-  StatusBar,
-  Platform
-} from "react-native"
+import { View, Text, StyleSheet, TouchableOpacity, SafeAreaView, Image, Modal, ScrollView,  Platform } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import Icon from "react-native-vector-icons/Ionicons"
-import MaterialIcons from "react-native-vector-icons/MaterialIcons"
-import { colors } from "../../constants/colors"
 import type { SettingsStackParamList } from "../../types/navigation"
+import { colors } from "../../constants/colors"
 
 type SettingsScreenNavigationProp = NativeStackNavigationProp<SettingsStackParamList, "SettingsMain">
 
-export default function SettingsScreen() {
+interface SettingOptionProps {
+  icon: string
+  title: string
+  onPress: () => void
+  iconColor?: string
+  backgroundColor?: string
+}
+
+const SettingOption = ({
+  icon,
+  title,
+  onPress,
+  iconColor = "#800080",
+  backgroundColor = "#F8E6FF",
+}: SettingOptionProps) => (
+  <TouchableOpacity style={styles.settingOption} onPress={onPress}>
+    <View style={[styles.iconContainer, { backgroundColor }]}>
+      <Icon name={icon} size={24} color={iconColor} />
+    </View>
+    <Text style={styles.settingTitle}>{title}</Text>
+  </TouchableOpacity>
+)
+
+export default function SettingsScreen({ onLogout }) {
   const navigation = useNavigation<SettingsScreenNavigationProp>()
   const [showLogoutModal, setShowLogoutModal] = useState(false)
 
@@ -66,8 +77,12 @@ export default function SettingsScreen() {
 
   const confirmLogout = () => {
     setShowLogoutModal(false)
-    // Implement logout logic here
-    // navigation.navigate("Login")
+    // Call the logout function from AuthContext
+    if (typeof onLogout === "function") {
+      onLogout()
+    } else {
+      console.error("onLogout is not a function:", onLogout)
+    }
   }
 
   const cancelLogout = () => {
@@ -76,51 +91,50 @@ export default function SettingsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <StatusBar backgroundColor={colors.primary} barStyle="light-content" />
-      
-      {/* Profile Header */}
-      <View style={styles.profileHeader}>
-        <View style={styles.profileLeftSection}>
-          <Image source={userProfile.avatar} style={styles.profileAvatar} />
-          <TouchableOpacity style={styles.editProfileButton} onPress={handleEditProfile}>
-            <Text style={styles.editProfileText}>Edit Profile</Text>
-          </TouchableOpacity>
-        </View>
+     
+ {/* Profile Header */}
+
+       <View style={styles.profileHeader}>
+         <View style={styles.profileLeftSection}>
+           <Image source={userProfile.avatar} style={styles.profileAvatar} />
+           <TouchableOpacity style={styles.editProfileButton} onPress={handleEditProfile}>
+             <Text style={styles.editProfileText}>Edit Profile</Text>
+           </TouchableOpacity>
+         </View>
         
-        <View style={styles.profileRightSection}>
-          <Text style={styles.profileName}>{userProfile.name}</Text>
-          <View style={styles.locationContainer}>
-            <Text style={styles.locationText}>{userProfile.location}</Text>
-            <View style={styles.triangleDown} />
-          </View>
+         <View style={styles.profileRightSection}>
+           <Text style={styles.profileName}>{userProfile.name}</Text>
+           <View style={styles.locationContainer}>
+             <Text style={styles.locationText}>{userProfile.location}</Text>
+             <View style={styles.triangleDown} />
+           </View>
           
-          {/* Contact Info Card */}
-          <View style={styles.contactCard}>
-            <View style={styles.contactInfo}>
-              <Text style={styles.contactLabel}>Phone</Text>
-              <Text style={styles.contactValue}>{userProfile.phone}</Text>
-            </View>
+           {/* Contact Info Card */}
+           <View style={styles.contactCard}>
+             <View style={styles.contactInfo}>
+               <Text style={styles.contactLabel}>Phone</Text>
+               <Text style={styles.contactValue}>{userProfile.phone}</Text>
+             </View>
 
             
-            <View style={styles.contactInfo}>
-              <Text style={styles.contactLabel}>Email</Text>
-              <Text style={styles.contactValue}>{userProfile.email}</Text>
-            </View>
-          </View>
-        </View>
-      </View>
+             <View style={styles.contactInfo}>
+               <Text style={styles.contactLabel}>Email</Text>
+               <Text style={styles.contactValue}>{userProfile.email}</Text>
+             </View>
+           </View>
+         </View>
+       </View>
 
-      <ScrollView style={styles.settingsContainer} showsVerticalScrollIndicator={false}>
+
+
+      <ScrollView style={styles.settingsContainer}>
         {/* General Settings */}
         <Text style={styles.sectionTitle}>General Settings</Text>
         <View style={styles.settingsGrid}>
-
           <View style={styles.settingCard}>
-
             <View style={styles.settingIconContainer}>
-              <Icon name="wallet-outline" size={24} color={colors.primary} />
+              <Icon name="wallet-outline" size={24} color="#800080" />
             </View>
-
             <TouchableOpacity style={styles.settingButton} onPress={handleWalletPress}>
               <Text style={styles.settingButtonText}>Wallet</Text>
             </TouchableOpacity>
@@ -128,7 +142,7 @@ export default function SettingsScreen() {
 
           <View style={styles.settingCard}>
             <View style={styles.settingIconContainer}>
-              <Icon name="headset-outline" size={24} color={colors.primary} />
+              <Icon name="headset-outline" size={24} color="#800080" />
             </View>
             <TouchableOpacity style={styles.settingButton} onPress={handleSupportPress}>
               <Text style={styles.settingButtonText}>Support</Text>
@@ -137,7 +151,7 @@ export default function SettingsScreen() {
 
           <View style={styles.settingCard}>
             <View style={styles.settingIconContainer}>
-              <Icon name="location-outline" size={24} color={colors.primary} />
+              <Icon name="location-outline" size={24} color="#800080" />
             </View>
             <TouchableOpacity style={styles.settingButton} onPress={handleAddressPress}>
               <Text style={styles.settingButtonText}>Address</Text>
@@ -148,19 +162,8 @@ export default function SettingsScreen() {
         {/* Other Settings */}
         <Text style={styles.sectionTitle}>Other Settings</Text>
         <View style={styles.otherSettingsContainer}>
-          <TouchableOpacity style={styles.settingOption} onPress={handleFAQsPress}>
-            <View style={styles.settingOptionIconContainer}>
-              <Icon name="document-text-outline" size={24} color={colors.primary} />
-            </View>
-            <Text style={styles.settingOptionTitle}>FAQs</Text>
-          </TouchableOpacity>
-          
-          <TouchableOpacity style={[styles.settingOption, { borderBottomWidth: 0 }]} onPress={handleNotificationsPress}>
-            <View style={styles.settingOptionIconContainer}>
-              <Icon name="notifications-outline" size={24} color={colors.primary} />
-            </View>
-            <Text style={styles.settingOptionTitle}>Notifications</Text>
-          </TouchableOpacity>
+          <SettingOption icon="document-text-outline" title="FAQs" onPress={handleFAQsPress} />
+          <SettingOption icon="notifications-outline" title="Notifications" onPress={handleNotificationsPress} />
         </View>
 
         {/* Logout and Delete Account */}
@@ -173,24 +176,22 @@ export default function SettingsScreen() {
         </TouchableOpacity>
       </ScrollView>
 
-
-     
       {/* Logout Confirmation Modal */}
       <Modal visible={showLogoutModal} transparent={true} animationType="fade">
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
             <View style={styles.warningIconContainer}>
-              <MaterialIcons name="warning" size={32} color="#FF9800" />
+              <Icon name="alert-triangle" size={32} color="#FF9800" />
             </View>
 
             <Text style={styles.modalTitle}>Are you sure you want to logout</Text>
 
             <View style={styles.modalButtons}>
-              <TouchableOpacity style={styles.cancelButton} onPress={cancelLogout}>
+              <TouchableOpacity style={[styles.modalButton, styles.cancelButton]} onPress={cancelLogout}>
                 <Text style={styles.cancelButtonText}>Cancel</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.proceedButton} onPress={confirmLogout}>
+              <TouchableOpacity style={[styles.modalButton, styles.proceedButton]} onPress={confirmLogout}>
                 <Text style={styles.proceedButtonText}>Proceed</Text>
               </TouchableOpacity>
             </View>
