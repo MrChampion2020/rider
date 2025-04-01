@@ -58,7 +58,12 @@ export default function AddressSelect() {
   }
 
   return (
-    <BottomSheet isVisible onClose={handleClose} title={`${type === "home" ? "Home" : "Work"} Address`}>
+    <BottomSheet 
+      isVisible 
+      onClose={handleClose} 
+      title={`${type === "home" ? "Home" : "Work"} Address`}
+      transparent={addressType === "sender"} // Make transparent only for sender address
+    >
       {addresses.map((address, index) => (
         <TouchableOpacity
           key={address.id}
@@ -165,4 +170,3 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
 })
-

@@ -22,12 +22,13 @@ interface BottomSheetProps {
   onClose: () => void
   title: string
   children: React.ReactNode
+  transparent?: boolean
 }
 
 const { height } = Dimensions.get("window")
 const SHEET_HEIGHT = height * 0.7
 
-export function BottomSheet({ isVisible, onClose, title, children }: BottomSheetProps) {
+export function BottomSheet({ isVisible, onClose, title, children, transparent = false }: BottomSheetProps) {
   const [animation] = useState(new Animated.Value(0))
 
   useEffect(() => {
@@ -53,14 +54,22 @@ export function BottomSheet({ isVisible, onClose, title, children }: BottomSheet
         <TouchableWithoutFeedback onPress={onClose}>
           <View style={styles.overlay} />
         </TouchableWithoutFeedback>
-        <Animated.View style={[styles.sheet, { transform: [{ translateY }] }]}>
-          <View style={styles.header}>
+        <Animated.View 
+          style={[
+            styles.sheet, 
+            { transform: [{ translateY }] },
+            transparent && styles.transparentSheet
+          ]}
+        >
+          <View style={[styles.header, transparent && styles.transparentHeader]}>
             <Text style={styles.title}>{title}</Text>
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
               <Icon name="close" size={24} color={colors.text.primary} />
             </TouchableOpacity>
           </View>
-          <View style={styles.content}>{children}</View>
+          <View style={[styles.content, transparent && styles.transparentContent]}>
+            {children}
+          </View>
         </Animated.View>
       </View>
     </Modal>
@@ -86,6 +95,9 @@ const styles = StyleSheet.create({
     height: SHEET_HEIGHT,
     overflow: "hidden",
   },
+  transparentSheet: {
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -93,6 +105,11 @@ const styles = StyleSheet.create({
     padding: theme.spacing.lg,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
+    backgroundColor: colors.white,
+  },
+  transparentHeader: {
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderBottomColor: 'rgba(200, 200, 200, 0.5)',
   },
   title: {
     fontSize: theme.fontSizes.lg,
@@ -111,5 +128,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: theme.spacing.lg,
   },
+  transparentContent: {
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  },
 })
-
